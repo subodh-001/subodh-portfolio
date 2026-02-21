@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Subodh Ram - Resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            line-height: 1.6;
+            background: #0a0a0a;
+            color: #00ff00;
+        }
+        
+        /* Terminal-like styling */
+        .terminal-header {
+            background: #1a1a1a;
+            border: 2px solid #00ff00;
+            border-bottom: none;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .btn-red { background: #ff5f56; }
+        .btn-yellow { background: #ffbd2e; }
+        .btn-green { background: #27c93f; }
+        
+        .terminal-title {
+            margin-left: auto;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .terminal-body {
+            background: #0a0a0a;
+            border: 2px solid #00ff00;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+        }
+        
+        .prompt {
+            color: #00ff00;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .prompt::before {
+            content: "root@subodh-ram:~# ";
+        }
+        
+        h1 {
+            color: #00ff00;
+            font-size: 36px;
+            margin: 20px 0;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            border-bottom: 3px solid #00ff00;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #00ff00;
+            font-size: 20px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00ff00;
+            padding-left: 15px;
+            text-transform: uppercase;
+        }
+        
+        h2::before {
+            content: "[";
+            color: #ffff00;
+        }
+        
+        h2::after {
+            content: "]";
+            color: #ffff00;
+        }
+        
+        .contact {
+            background: #1a1a1a;
+            padding: 20px;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            margin: 20px 0;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+        }
+        
+        .contact-item {
+            margin: 8px 0;
+            color: #00ff00;
+        }
+        
+        .contact-label {
+            color: #ffff00;
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+        }
+        
+        .section {
+            margin: 20px 0;
+            padding-left: 10px;
+        }
+        
+        .job, .education {
+            margin: 20px 0;
+            padding: 15px;
+            background: #1a1a1a;
+            border-left: 3px solid #00ff00;
+            position: relative;
+        }
+        
+        .job::before, .education::before {
+            content: "●";
+            color: #00ff00;
+            position: absolute;
+            left: -8px;
+            font-size: 16px;
+        }
+        
+        .job-title, .degree {
+            font-weight: bold;
+            color: #00ff00;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .job-meta, .edu-meta {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+        
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        li {
+            margin: 8px 0;
+            color: #00ff00;
+            position: relative;
+        }
+        
+        li::marker {
+            content: "▸ ";
+            color: #ffff00;
+        }
+        
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .skill {
+            background: #00ff00;
+            color: #000;
+            padding: 6px 15px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 12px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+        
+        .status-line {
+            color: #888;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        
+        .status-ok {
+            color: #00ff00;
+        }
+        
+        .status-info {
+            color: #ffff00;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #00ff00;
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+        }
+        
+        @media print {
+            body {
+                background: #000;
+            }
+            .terminal-body {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-header">
+        <span class="terminal-button btn-red"></span>
+        <span class="terminal-button btn-yellow"></span>
+        <span class="terminal-button btn-green"></span>
+        <span class="terminal-title">resume.pdf - Terminal</span>
+    </div>
+    
+    <div class="terminal-body">
+        <div class="status-line">
+            <span class="status-ok">[OK]</span> Loading resume data...
+        </div>
+        <div class="status-line">
+            <span class="status-ok">[OK]</span> System ready. Access granted.
+        </div>
+        
+        <div class="prompt">whoami</div>
+        <h1>SUBODH RAM</h1>
+        
+        <div class="prompt">cat /proc/userinfo</div>
+        <div class="contact">
+            <div class="contact-item">
+                <span class="contact-label">Email:</span> subodhram3350@gmail.com
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">Phone:</span> 9076314255
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">LinkedIn:</span> linkedin.com/in/subodhram
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">GitHub:</span> github.com/subodh-001
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">DOB:</span> 28/04/2003
+            </div>
+        </div>
+
+        <div class="prompt">cat /etc/education.conf</div>
+        <h2>Education</h2>
+        <div class="section">
+            <div class="education">
+                <div class="degree">Master of Computer Applications (MCA)</div>
+                <div class="edu-meta">MPSTME, NMIMS University | 2024–2026 | CGPA: 7.38/10</div>
+            </div>
+            <div class="education">
+                <div class="degree">Bachelor of Science in Information Technology (BSc IT)</div>
+                <div class="edu-meta">Tolani College of Commerce | 2020–2023 | CGPA: 8.28/10</div>
+            </div>
+            <div class="education">
+                <div class="degree">Higher Secondary Certificate (HSC)</div>
+                <div class="edu-meta">Chandrabhan Sharma College | 2018–2020 | 74.77%</div>
+            </div>
+            <div class="education">
+                <div class="degree">Secondary School Certificate (SSC)</div>
+                <div class="edu-meta">S.A Public School | 2018 | 66.20%</div>
+            </div>
+        </div>
+
+        <div class="prompt">cat /proc/summary</div>
+        <h2>Professional Summary</h2>
+        <div class="section">
+            Master of Computer Applications student specializing in Networking & IT Infrastructure. 
+            Experienced in data analysis, system security, and full-stack development with strong 
+            analytical and problem-solving capabilities.
+        </div>
+
+        <div class="prompt">ls -la /usr/bin/skills/</div>
+        <h2>Technical Skills</h2>
+        <div class="section">
+            <div class="skills">
+                <span class="skill">Java</span>
+                <span class="skill">Python</span>
+                <span class="skill">JavaScript</span>
+                <span class="skill">React</span>
+                <span class="skill">Node.js</span>
+                <span class="skill">MongoDB</span>
+                <span class="skill">MySQL</span>
+                <span class="skill">Firebase</span>
+                <span class="skill">TCP/IP</span>
+                <span class="skill">Subnetting</span>
+                <span class="skill">Routing</span>
+                <span class="skill">DHCP</span>
+                <span class="skill">DNS</span>
+                <span class="skill">Nmap</span>
+                <span class="skill">Wireshark</span>
+                <span class="skill">Power BI</span>
+                <span class="skill">Tableau</span>
+                <span class="skill">Excel</span>
+            </div>
+        </div>
+
+        <div class="prompt">netstat -tupln | grep ESTABLISHED</div>
+        <h2>Experience</h2>
+        <div class="section">
+            <div class="job">
+                <div class="job-title">Data Analyst Intern - Aivariant</div>
+                <div class="job-meta">Aug 2023 – Jan 2024 | Remote</div>
+                <ul>
+                    <li>Analyzed large datasets to identify trends and patterns</li>
+                    <li>Created interactive dashboards using Power BI and Tableau</li>
+                    <li>Collaborated with cross-functional teams to deliver insights</li>
+                    <li>Automated data processing workflows using Python</li>
+                </ul>
+            </div>
+            <div class="job">
+                <div class="job-title">IT Support Specialist - Freelance</div>
+                <div class="job-meta">2022 – Present | Remote</div>
+                <ul>
+                    <li>Provided technical support for network configuration</li>
+                    <li>Troubleshot hardware and software issues</li>
+                    <li>Implemented security measures and access controls</li>
+                    <li>Maintained system documentation and user guides</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="prompt">ps aux | grep "project" | grep -v grep</div>
+        <h2>Projects</h2>
+        <div class="section">
+            <div class="job">
+                <div class="job-title">Smart Parking System (2025)</div>
+                <div class="job-meta">Tech Stack: Java, Spring Boot, JSP, Oracle DB, Firebase</div>
+                <ul>
+                    <li>Real-time parking discovery and availability</li>
+                    <li>Dynamic pricing and booking system</li>
+                    <li>OpenStreetMap integration for navigation</li>
+                    <li>QR-based secure access control</li>
+                </ul>
+            </div>
+            <div class="job">
+                <div class="job-title">Property Price Prediction (2025)</div>
+                <div class="job-meta">Tech Stack: React, Node.js, Python, MongoDB</div>
+                <ul>
+                    <li>AI-based property price prediction</li>
+                    <li>Interactive dashboards and analytics</li>
+                    <li>Real-time market trend analysis</li>
+                    <li>Comprehensive data visualization</li>
+                </ul>
+            </div>
+            <div class="job">
+                <div class="job-title">SmartTech Connect (2025)</div>
+                <div class="job-meta">Tech Stack: React, Node.js, MongoDB, Firebase</div>
+                <ul>
+                    <li>Technician booking and scheduling</li>
+                    <li>Real-time chat functionality</li>
+                    <li>Community forum and support</li>
+                    <li>AI-powered recommendations</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="prompt">cat /etc/certifications.d/*.cert</div>
+        <h2>Certifications</h2>
+        <div class="section">
+            <div class="job">
+                <div class="job-title">Data Analytics Certification</div>
+                <div class="job-meta">ExcelR | Aug 2023 – Jan 2024</div>
+            </div>
+        </div>
+
+        <div class="prompt">tail -f /var/log/achievements.log</div>
+        <h2>Achievements</h2>
+        <div class="section">
+            <div class="status-line">
+                <span class="status-ok">[SUCCESS]</span> Achievement Logged
+            </div>
+            <p style="margin-top: 10px;">
+                Led end-to-end data analysis projects converting raw data into meaningful insights, 
+                demonstrating strong analytical capabilities and technical expertise in data-driven decision making.
+            </p>
+        </div>
+
+        <div class="footer">
+            <div class="status-line">
+                <span class="status-ok">[OK]</span> Resume loaded successfully
+            </div>
+            <div style="margin-top: 10px;">
+                © 2026 Subodh Ram | Generated: <span class="status-info"><?php echo date('Y-m-d H:i:s'); ?></span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

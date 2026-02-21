@@ -1,0 +1,19 @@
+{
+  "frontend/src/App.tsx": "Main application component with terminal black background, Matrix-style falling characters, scanline overlay, and all portfolio sections rendered with CMD aesthetic.",
+  "frontend/src/components/Hero.tsx": "Hero section with terminal window styling, typing animations for name/title/tagline, CMD prompt format, and download resume button with cursor blink on hover.",
+  "frontend/src/components/PersonalInfo.tsx": "Personal information section displaying date of birth with CMD systeminfo command format and terminal styling.",
+  "frontend/src/components/Education.tsx": "Education section formatted as CMD 'dir' command output with ASCII box-drawing borders and four educational entries in terminal style.",
+  "frontend/src/components/Projects.tsx": "Projects section formatted as CMD 'tasklist' output showing three projects with PID, status, tech stack, and features using terminal styling.",
+  "frontend/src/components/Experience.tsx": "Experience section formatted as CMD 'netstat' output displaying two work experiences with responsibilities in terminal box styling.",
+  "frontend/src/components/Certifications.tsx": "Certifications section with CMD 'dir' command format showing Data Analytics certification in ASCII bordered box.",
+  "frontend/src/components/Skills.tsx": "Skills section displaying technical skills as CMD command output (ipconfig format) and soft skills as text file output, all in terminal green monospace font.",
+  "frontend/src/components/Achievements.tsx": "Achievements section formatted as log file output with terminal styling and success status indicators.",
+  "frontend/src/components/Contact.tsx": "Contact section formatted as CMD 'ping' command output displaying contact methods in table format with protocol, endpoint, address, and status columns.",
+  "frontend/src/components/Footer.tsx": "Footer component with terminal box styling, CMD echo commands, copyright notice, and caffeine.ai attribution with UTM tracking.",
+  "frontend/src/components/NetworkLines.tsx": "Canvas-based Matrix-style falling ASCII characters animation in terminal green color representing network data flow.",
+  "frontend/src/index.css": "Global styles with terminal color palette (black background, green primary, yellow accent, white text), monospace fonts, cursor blink animation, scanline effect, and terminal box utilities.",
+  "frontend/tailwind.config.js": "Tailwind configuration with terminal color system, monospace font stack, zero border radius, and animations for cursor blink, fade-in, and scanline effects.",
+  "frontend/src/hooks/useQueries.ts": "Empty placeholder file as portfolio is static with no backend data requirements.",
+  "frontend/src/hooks/useTypingEffect.ts": "Custom React hook that implements character-by-character typing animation with configurable speed and start delay, returning displayed text and completion status.",
+  "frontend/src/components/ScanlineOverlay.tsx": "Fixed overlay component that renders horizontal scanlines across the viewport to simulate CRT monitor appearance."
+}

@@ -1,0 +1,187 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-transform-the-entire-portfolio-ui-to-mimic-a-command-line-terminal-interface-with-monospace-fonts-courier-new-consolas-or-monaco-dark-terminal-background-black-or-dark-gray-green-terminal-text-as-primary-color-and-blinking-cursor-animations",
+      "featureTitle": "Transform the entire portfolio UI to mimic a command-line terminal interface with monospace fonts (Courier New, Consolas, or Monaco), dark terminal background (black or dark gray), green terminal text as primary color, and blinking cursor animations",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-19"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-replace-section-headings-with-cmd-style-command-prompts-e-g-c-users-subodhram-dir-education-c-users-subodhram-ipconfig-all-for-networking-sections-c-users-subodhram-tasklist-for-projects",
+      "featureTitle": "Replace section headings with CMD-style command prompts (e.g., 'C:\\Users\\SubodhRam> dir Education', 'C:\\Users\\SubodhRam> ipconfig /all' for networking sections, 'C:\\Users\\SubodhRam> tasklist' for projects)",
+      "files": [
+        "frontend/src/components/Achievements.tsx",
+        "frontend/src/components/Certifications.tsx",
+        "frontend/src/components/Contact.tsx",
+        "frontend/src/components/Education.tsx",
+        "frontend/src/components/Experience.tsx",
+        "frontend/src/components/PersonalInfo.tsx",
+        "frontend/src/components/Projects.tsx",
+        "frontend/src/components/Skills.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-20"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-section-content-with-cmd-output-formatting-including-ascii-borders-pipe-characters-for-tables-and-terminal-style-lists-with-bullet-points-replaced-by-command-output-symbols",
+      "featureTitle": "Display section content with CMD output formatting including ASCII borders, pipe characters for tables, and terminal-style lists with bullet points replaced by command output symbols (>, -, *)",
+      "files": [
+        "frontend/src/components/Achievements.tsx",
+        "frontend/src/components/Certifications.tsx",
+        "frontend/src/components/Contact.tsx",
+        "frontend/src/components/Education.tsx",
+        "frontend/src/components/Experience.tsx",
+        "frontend/src/components/Projects.tsx",
+        "frontend/src/components/Skills.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-21"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-terminal-style-typing-animations-for-the-hero-section-where-the-name-title-and-tagline-appear-character-by-character-as-if-being-typed-in-a-cmd-window",
+      "featureTitle": "Add terminal-style typing animations for the Hero section where the name, title, and tagline appear character-by-character as if being typed in a CMD window",
+      "files": [
+        "frontend/src/components/Hero.tsx",
+        "frontend/src/hooks/useTypingEffect.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-22"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-replace-the-download-resume-button-with-a-cmd-style-button-displaying-c-download-resume-pdf-with-terminal-green-text-on-dark-background-and-hover-effect-that-adds-a-blinking-cursor",
+      "featureTitle": "Replace the Download Resume button with a CMD-style button displaying 'C:\\> download resume.pdf' with terminal green text on dark background and hover effect that adds a blinking cursor",
+      "files": [
+        "frontend/src/components/Hero.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-23"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-color-scheme-to-use-classic-terminal-colors-black-dark-gray-background-bright-green-00ff00-for-primary-text-white-for-secondary-text-and-yellow-for-highlights-or-warnings-removing-the-existing-neon-blue-and-purple-theme",
+      "featureTitle": "Update the color scheme to use classic terminal colors: black/dark gray background, bright green (#00FF00) for primary text, white for secondary text, and yellow for highlights or warnings, removing the existing neon blue and purple theme",
+      "files": [
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-24"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-scanline-overlay-effect-across-the-entire-viewport-to-simulate-crt-monitor-appearance-and-enhance-the-retro-terminal-aesthetic",
+      "featureTitle": "Add scanline overlay effect across the entire viewport to simulate CRT monitor appearance and enhance the retro terminal aesthetic",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/ScanlineOverlay.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-25"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-replace-the-network-lines-animation-with-ascii-art-network-diagrams-or-flowing-text-characters-like-matrix-style-falling-characters-that-represent-network-packets-and-data-flow",
+      "featureTitle": "Replace the network lines animation with ASCII art network diagrams or flowing text characters (like Matrix-style falling characters) that represent network packets and data flow",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/NetworkLines.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-26"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-format-skills-section-to-display-as-cmd-command-output-with-commands-like-netstat-ano-for-networking-skills-python-version-for-programming-languages-and-systeminfo-for-it-tools",
+      "featureTitle": "Format Skills section to display as CMD command output with commands like 'netstat -ano' for networking skills, 'python --version' for programming languages, and 'systeminfo' for IT tools",
+      "files": [
+        "frontend/src/components/Skills.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-27"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

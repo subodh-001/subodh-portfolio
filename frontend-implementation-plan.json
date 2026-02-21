@@ -1,0 +1,261 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Transform portfolio into command-line terminal aesthetic with networking CMD interface",
+  "requirements": [
+    {
+      "id": "REQ-19",
+      "summary": "Transform entire portfolio UI to mimic command-line terminal with monospace fonts, dark terminal background, green terminal text, and blinking cursor animations",
+      "acceptanceCriteria": [
+        "All text uses monospace fonts typical of terminal interfaces",
+        "Background is dark terminal-style (black or dark gray)",
+        "Primary text color is terminal green (#00FF00 or similar)",
+        "Cursor animations with blinking effect are present in Hero section"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Replace existing CSS custom properties with terminal color scheme (black/dark gray background, terminal green primary, white secondary). Update font stack to use monospace fonts (Courier New, Consolas, Monaco). Add CSS classes for blinking cursor animation and terminal text effects. Remove existing neon blue/purple theme variables."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Update Tailwind configuration to use terminal color palette in extend.colors. Replace OKLCH colors with terminal colors: background as black (#000000 or #0a0a0a), primary as terminal green (#00FF00), secondary as white/light gray, and accent as terminal yellow. Add animation configuration for cursor blink effect."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Update main layout container to use terminal background color. Remove or replace smart city background reference with terminal-appropriate styling. Ensure all section wrappers use dark terminal background."
+        }
+      ]
+    },
+    {
+      "id": "REQ-20",
+      "summary": "Replace section headings with CMD-style command prompts using networking commands like 'dir', 'ipconfig /all', 'tasklist'",
+      "acceptanceCriteria": [
+        "Each section header displays as a CMD prompt with appropriate networking commands",
+        "Education section uses 'dir' command format",
+        "Skills/Experience sections use networking commands like 'ipconfig', 'netstat', 'ping'",
+        "Projects section uses 'tasklist' or similar command format"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Education.tsx",
+          "operation": "modify",
+          "description": "Replace section heading with CMD prompt format: 'C:\\Users\\SubodhRam> dir Education'. Update heading component to use monospace font and terminal green color. Maintain responsive grid layout for education cards."
+        },
+        {
+          "path": "frontend/src/components/Skills.tsx",
+          "operation": "modify",
+          "description": "Replace section heading with networking CMD prompt: 'C:\\Users\\SubodhRam> ipconfig /all'. Apply terminal styling to heading with monospace font and green color."
+        },
+        {
+          "path": "frontend/src/components/Experience.tsx",
+          "operation": "modify",
+          "description": "Replace section heading with networking CMD prompt: 'C:\\Users\\SubodhRam> netstat -ano'. Apply terminal styling to heading."
+        },
+        {
+          "path": "frontend/src/components/Projects.tsx",
+          "operation": "modify",
+          "description": "Replace section heading with CMD prompt: 'C:\\Users\\SubodhRam> tasklist'. Apply terminal styling to heading with monospace font and terminal green."
+        },
+        {
+          "path": "frontend/src/components/Certifications.tsx",
+          "operation": "modify",
+          "description": "Replace section heading with CMD prompt format using appropriate networking or system command. Apply terminal styling."
+        },
+        {
+          "path": "frontend/src/components/Achievements.tsx",
+          "operation": "modify",
+          "description": "Replace section heading with CMD prompt format. Apply terminal styling with monospace font and terminal green."
+        },
+        {
+          "path": "frontend/src/components/Contact.tsx",
+          "operation": "modify",
+          "description": "Replace section heading with CMD prompt: 'C:\\Users\\SubodhRam> ping contacts'. Apply terminal styling."
+        },
+        {
+          "path": "frontend/src/components/PersonalInfo.tsx",
+          "operation": "modify",
+          "description": "Replace section heading with CMD prompt format like 'C:\\Users\\SubodhRam> systeminfo'. Apply terminal styling."
+        }
+      ]
+    },
+    {
+      "id": "REQ-21",
+      "summary": "Display section content with CMD output formatting including ASCII borders, pipe characters for tables, and terminal-style list symbols",
+      "acceptanceCriteria": [
+        "Content cards use ASCII box-drawing characters for borders",
+        "Lists use CMD-style symbols (>, -, *) instead of traditional bullets",
+        "Tables or grids use pipe characters (|) and dashes (-) for structure",
+        "Text formatting mimics terminal output with consistent spacing"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Education.tsx",
+          "operation": "modify",
+          "description": "Replace card borders with ASCII box-drawing characters (┌─┐│└┘). Format education entries as CMD directory listing output with proper spacing and alignment."
+        },
+        {
+          "path": "frontend/src/components/Skills.tsx",
+          "operation": "modify",
+          "description": "Format skills output as CMD command results. Replace skill badges with terminal-style text using pipe characters for separation. Use ASCII borders for skill category containers."
+        },
+        {
+          "path": "frontend/src/components/Projects.tsx",
+          "operation": "modify",
+          "description": "Format project cards with ASCII borders. Replace bullet points in features lists with CMD-style symbols (>, -, *). Format project information as terminal output."
+        },
+        {
+          "path": "frontend/src/components/Experience.tsx",
+          "operation": "modify",
+          "description": "Apply ASCII borders to experience cards. Replace bullet points in responsibility lists with terminal symbols (>, -, *). Format dates and titles as CMD output."
+        },
+        {
+          "path": "frontend/src/components/Certifications.tsx",
+          "operation": "modify",
+          "description": "Format certification card with ASCII box-drawing borders. Style content as terminal output."
+        },
+        {
+          "path": "frontend/src/components/Achievements.tsx",
+          "operation": "modify",
+          "description": "Apply ASCII borders to achievement card. Format achievement text as CMD output."
+        },
+        {
+          "path": "frontend/src/components/Contact.tsx",
+          "operation": "modify",
+          "description": "Format contact information grid using pipe characters and dashes for table structure. Replace contact cards with terminal-style output format."
+        }
+      ]
+    },
+    {
+      "id": "REQ-22",
+      "summary": "Add terminal-style typing animations for Hero section where name, title, and tagline appear character-by-character",
+      "acceptanceCriteria": [
+        "Hero text appears with typing animation on page load",
+        "Animation speed mimics realistic typing (50-100ms per character)",
+        "Blinking cursor follows the typing animation",
+        "Animation completes before user can interact with other elements"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Hero.tsx",
+          "operation": "modify",
+          "description": "Implement typing animation effect for name, title, and tagline using React state and useEffect. Add character-by-character rendering at 50-100ms intervals. Include blinking cursor element that follows typing progress. Remove or replace existing particle network canvas background. Apply terminal styling with green text on black background."
+        },
+        {
+          "path": "frontend/src/hooks/useTypingEffect.ts",
+          "operation": "create",
+          "description": "Create custom React hook that handles typing animation logic. Accept text string and typing speed as parameters. Return current displayed text and typing completion status. Include logic for cursor position tracking."
+        }
+      ]
+    },
+    {
+      "id": "REQ-23",
+      "summary": "Replace Download Resume button with CMD-style button displaying 'C:\\> download resume.pdf' with terminal green text and blinking cursor on hover",
+      "acceptanceCriteria": [
+        "Button text displays as a command prompt format",
+        "Uses terminal green color (#00FF00 or similar)",
+        "Hover state adds blinking cursor animation",
+        "Download functionality remains intact"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Hero.tsx",
+          "operation": "modify",
+          "description": "Replace existing Download Resume button with terminal-styled button. Update button text to 'C:\\> download resume.pdf'. Apply terminal green color and monospace font. Add hover effect that displays blinking cursor after text. Preserve existing download functionality."
+        }
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "summary": "Update color scheme to classic terminal colors: black/dark gray background, bright green primary, white secondary, yellow highlights",
+      "acceptanceCriteria": [
+        "Background is pure black or very dark gray (#0a0a0a)",
+        "Primary text is terminal green (#00FF00)",
+        "Secondary text is white or light gray",
+        "Accent color is terminal yellow for important elements",
+        "No blue or purple colors remain in the design"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Update all color CSS variables to terminal palette. Set background to #000000 or #0a0a0a, primary text to #00FF00 (terminal green), secondary to #FFFFFF or #CCCCCC (white/light gray), accent to #FFFF00 (terminal yellow). Remove all neon blue and purple color definitions and gradient utilities."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Update extend.colors configuration with terminal color palette. Replace all existing color definitions with terminal colors. Ensure consistent color naming across configuration."
+        }
+      ]
+    },
+    {
+      "id": "REQ-25",
+      "summary": "Add scanline overlay effect across entire viewport to simulate CRT monitor appearance",
+      "acceptanceCriteria": [
+        "Subtle horizontal scanlines appear across the entire page",
+        "Scanlines are semi-transparent and do not obstruct readability",
+        "Effect creates authentic CRT terminal appearance",
+        "Scanlines animate slowly if performance allows"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ScanlineOverlay.tsx",
+          "operation": "create",
+          "description": "Create fixed-position overlay component that renders horizontal scanlines across viewport. Use CSS linear-gradient or repeating-linear-gradient for scanline pattern. Apply semi-transparent styling (opacity 0.1-0.2). Add optional subtle animation for moving scanlines. Position as fixed overlay with pointer-events-none."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Import and render ScanlineOverlay component at top level of App layout so it covers all content. Position as fixed overlay above all sections."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add CSS utility classes for scanline effect styling including gradient patterns and animation keyframes for optional scrolling scanlines."
+        }
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "summary": "Replace network lines animation with ASCII art network diagrams or Matrix-style falling characters representing network data flow",
+      "acceptanceCriteria": [
+        "Background animation uses ASCII characters instead of SVG lines",
+        "Characters flow downward in terminal green color",
+        "Animation represents network data flow or packet transmission",
+        "Performance remains smooth with animation"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/NetworkLines.tsx",
+          "operation": "modify",
+          "description": "Replace existing canvas-based network lines with ASCII character animation. Implement Matrix-style falling characters (letters, numbers, network symbols) in terminal green. Create columns of falling characters at random speeds. Use requestAnimationFrame for smooth performance. Characters should fade as they fall to create depth effect."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Ensure NetworkLines component (now ASCII animation) remains rendered as background overlay. Verify z-index layering so ASCII animation appears behind content but above base background."
+        }
+      ]
+    },
+    {
+      "id": "REQ-27",
+      "summary": "Format Skills section to display as CMD command output with networking commands like 'netstat -ano', 'python --version', 'systeminfo'",
+      "acceptanceCriteria": [
+        "Each skill category displays as output from a relevant CMD command",
+        "Networking skills use 'netstat', 'ipconfig', 'ping' command formatting",
+        "Programming skills use version check commands",
+        "Output formatting matches authentic CMD response structure"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Skills.tsx",
+          "operation": "modify",
+          "description": "Restructure Skills component to format each skill category as CMD command output. For networking skills, use 'netstat -ano' or 'ipconfig /all' output format with columns and spacing. For programming languages, use version check command format like 'python --version'. For tools, use 'systeminfo' style output. Maintain authentic CMD output spacing, alignment, and structure with monospace font."
+        }
+      ]
+    }
+  ]
+}

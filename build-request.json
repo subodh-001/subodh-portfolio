@@ -1,0 +1,197 @@
+{
+  "kind": "build_request",
+  "title": "Transform portfolio into command-line terminal aesthetic with networking CMD interface",
+  "projectName": "Terminal Portfolio",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-19",
+      "text": "Transform the entire portfolio UI to mimic a command-line terminal interface with monospace fonts (Courier New, Consolas, or Monaco), dark terminal background (black or dark gray), green terminal text as primary color, and blinking cursor animations",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "isko thoda professonal and more creative bana sakta hai kya jese ki pura cmd me"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All text uses monospace fonts typical of terminal interfaces",
+        "Background is dark terminal-style (black or dark gray)",
+        "Primary text color is terminal green (#00FF00 or similar)",
+        "Cursor animations with blinking effect are present in Hero section"
+      ]
+    },
+    {
+      "id": "REQ-20",
+      "text": "Replace section headings with CMD-style command prompts (e.g., 'C:\\Users\\SubodhRam> dir Education', 'C:\\Users\\SubodhRam> ipconfig /all' for networking sections, 'C:\\Users\\SubodhRam> tasklist' for projects)",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "kyu ki networking me cmd hi cahlta hai na"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each section header displays as a CMD prompt with appropriate networking commands",
+        "Education section uses 'dir' command format",
+        "Skills/Experience sections use networking commands like 'ipconfig', 'netstat', 'ping'",
+        "Projects section uses 'tasklist' or similar command format"
+      ]
+    },
+    {
+      "id": "REQ-21",
+      "text": "Display section content with CMD output formatting including ASCII borders, pipe characters for tables, and terminal-style lists with bullet points replaced by command output symbols (>, -, *)",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "pura cmd me"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Content cards use ASCII box-drawing characters for borders",
+        "Lists use CMD-style symbols (>, -, *) instead of traditional bullets",
+        "Tables or grids use pipe characters (|) and dashes (-) for structure",
+        "Text formatting mimics terminal output with consistent spacing"
+      ]
+    },
+    {
+      "id": "REQ-22",
+      "text": "Add terminal-style typing animations for the Hero section where the name, title, and tagline appear character-by-character as if being typed in a CMD window",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "more creative"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Hero text appears with typing animation on page load",
+        "Animation speed mimics realistic typing (50-100ms per character)",
+        "Blinking cursor follows the typing animation",
+        "Animation completes before user can interact with other elements"
+      ]
+    },
+    {
+      "id": "REQ-23",
+      "text": "Replace the Download Resume button with a CMD-style button displaying 'C:\\> download resume.pdf' with terminal green text on dark background and hover effect that adds a blinking cursor",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "professonal and more creative"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Button text displays as a command prompt format",
+        "Uses terminal green color (#00FF00 or similar)",
+        "Hover state adds blinking cursor animation",
+        "Download functionality remains intact"
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "text": "Update the color scheme to use classic terminal colors: black/dark gray background, bright green (#00FF00) for primary text, white for secondary text, and yellow for highlights or warnings, removing the existing neon blue and purple theme",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "kyu ki networking me cmd hi cahlta hai na"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Background is pure black or very dark gray (#0a0a0a)",
+        "Primary text is terminal green (#00FF00)",
+        "Secondary text is white or light gray",
+        "Accent color is terminal yellow for important elements",
+        "No blue or purple colors remain in the design"
+      ]
+    },
+    {
+      "id": "REQ-25",
+      "text": "Add scanline overlay effect across the entire viewport to simulate CRT monitor appearance and enhance the retro terminal aesthetic",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "more creative"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Subtle horizontal scanlines appear across the entire page",
+        "Scanlines are semi-transparent and do not obstruct readability",
+        "Effect creates authentic CRT terminal appearance",
+        "Scanlines animate slowly if performance allows"
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "text": "Replace the network lines animation with ASCII art network diagrams or flowing text characters (like Matrix-style falling characters) that represent network packets and data flow",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "kyu ki networking me cmd hi cahlta hai na"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Background animation uses ASCII characters instead of SVG lines",
+        "Characters flow downward in terminal green color",
+        "Animation represents network data flow or packet transmission",
+        "Performance remains smooth with animation"
+      ]
+    },
+    {
+      "id": "REQ-27",
+      "text": "Format Skills section to display as CMD command output with commands like 'netstat -ano' for networking skills, 'python --version' for programming languages, and 'systeminfo' for IT tools",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "networking me cmd hi cahlta hai na"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each skill category displays as output from a relevant CMD command",
+        "Networking skills use 'netstat', 'ipconfig', 'ping' command formatting",
+        "Programming skills use version check commands",
+        "Output formatting matches authentic CMD response structure"
+      ]
+    }
+  ],
+  "constraints": [
+    "Preserve all existing content and data (education details, project information, work experience, skills, certifications)",
+    "Maintain responsive design for mobile and desktop viewing",
+    "Keep download resume functionality intact",
+    "Do not modify backend/main.mo or immutable frontend paths",
+    "Ensure text remains readable despite terminal aesthetic"
+  ],
+  "nonGoals": [
+    "Adding actual command-line functionality or terminal emulation",
+    "Making the portfolio interactive as a real terminal",
+    "Implementing command parsing or execution",
+    "Adding new content sections beyond redesigning existing ones"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

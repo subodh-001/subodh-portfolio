@@ -1,0 +1,122 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const path = require('path');
+
+// Simple PDF generation using HTML content
+const htmlPath = path.join(__dirname, 'build-template/src/frontend/public/assets/resume.html');
+const pdfPath = path.join(__dirname, 'build-template/src/frontend/public/assets/resume.pdf');
+
+console.log('📄 Generating PDF from HTML...');
+
+// Check if HTML file exists
+if (!fs.existsSync(htmlPath)) {
+    console.error('❌ Resume HTML file not found!');
+    process.exit(1);
+}
+
+// For now, create a placeholder PDF with instructions
+const placeholderContent = `%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/Resources <<
+/Font <<
+/F1 4 0 R
+>>
+>>
+/MediaBox [0 0 612 792]
+/Contents 5 0 R
+>>
+endobj
+4 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+5 0 obj
+<<
+/Length 500
+>>
+stream
+BT
+/F1 24 Tf
+50 750 Td
+(SUBODH RAM) Tj
+0 -30 Td
+/F1 12 Tf
+(Email: subodhram3350@gmail.com) Tj
+0 -20 Td
+(Phone: 9076314255) Tj
+0 -20 Td
+(LinkedIn: linkedin.com/in/subodhram) Tj
+0 -20 Td
+(GitHub: github.com/subodh-001) Tj
+0 -40 Td
+/F1 16 Tf
+(EDUCATION) Tj
+0 -25 Td
+/F1 10 Tf
+(Master of Computer Applications - NMIMS University) Tj
+0 -15 Td
+(2024-2026 | CGPA: 7.38/10) Tj
+0 -30 Td
+/F1 16 Tf
+(SKILLS) Tj
+0 -25 Td
+/F1 10 Tf
+(Java, Python, JavaScript, React, Node.js, MongoDB) Tj
+0 -15 Td
+(TCP/IP, Networking, Nmap, Wireshark, Power BI) Tj
+0 -40 Td
+/F1 16 Tf
+(EXPERIENCE) Tj
+0 -25 Td
+/F1 10 Tf
+(Data Analyst Intern - Aivariant | Aug 2023 - Jan 2024) Tj
+0 -40 Td
+/F1 8 Tf
+(For full resume, visit: /assets/resume.html) Tj
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+0000000115 00000 n
+0000000262 00000 n
+0000000341 00000 n
+trailer
+<<
+/Size 6
+/Root 1 0 R
+>>
+startxref
+892
+%%EOF`;
+
+fs.writeFileSync(pdfPath, placeholderContent);
+console.log('✅ PDF generated successfully!');
+console.log(`📍 Location: ${pdfPath}`);
+console.log('\n💡 Note: For a full PDF, you can:');
+console.log('   1. Open /assets/resume.html in browser');
+console.log('   2. Print to PDF (Ctrl+P)');
+console.log('   3. Save as resume.pdf in public/assets/');

@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --radius: 0;
+        
+        /* Terminal color palette */
+        --terminal-black: 0 0 0;
+        --terminal-dark-gray: 0.1 0 0;
+        --terminal-green: 0.75 0.35 145;
+        --terminal-yellow: 0.85 0.25 95;
+        --terminal-white: 0.95 0 0;
+        --terminal-gray: 0.6 0 0;
+        
+        /* Base colors using terminal palette */
+        --background: var(--terminal-black);
+        --foreground: var(--terminal-white);
+        --card: var(--terminal-dark-gray);
+        --card-foreground: var(--terminal-white);
+        --popover: var(--terminal-dark-gray);
+        --popover-foreground: var(--terminal-white);
+        --primary: var(--terminal-green);
+        --primary-foreground: var(--terminal-black);
+        --secondary: var(--terminal-gray);
+        --secondary-foreground: var(--terminal-white);
+        --muted: var(--terminal-dark-gray);
+        --muted-foreground: var(--terminal-gray);
+        --accent: var(--terminal-yellow);
+        --accent-foreground: var(--terminal-black);
+        --destructive: 0.55 0.35 25;
+        --destructive-foreground: var(--terminal-white);
+        --border: var(--terminal-green) / 20%;
+        --input: var(--terminal-green) / 30%;
+        --ring: var(--terminal-green);
+    }
+
+    .dark {
+        --background: var(--terminal-black);
+        --foreground: var(--terminal-white);
+    }
+
+    * {
+        @apply border-border;
+    }
+    
+    body {
+        @apply bg-terminal-black text-terminal-white;
+        font-family: 'Courier New', 'Courier Prime', 'Consolas', 'Monaco', monospace;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Courier New', 'Courier Prime', 'Consolas', 'Monaco', monospace;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+@layer utilities {
+    /* Terminal colors */
+    .text-terminal-black {
+        color: oklch(var(--terminal-black));
+    }
+    
+    .text-terminal-green {
+        color: oklch(var(--terminal-green));
+    }
+
+    .text-terminal-yellow {
+        color: oklch(var(--terminal-yellow));
+    }
+
+    .text-terminal-white {
+        color: oklch(var(--terminal-white));
+    }
+
+    .text-terminal-gray {
+        color: oklch(var(--terminal-gray));
+    }
+
+    .bg-terminal-black {
+        background-color: oklch(var(--terminal-black));
+    }
+
+    .bg-terminal-green {
+        background-color: oklch(var(--terminal-green));
+    }
+
+    .bg-terminal-yellow {
+        background-color: oklch(var(--terminal-yellow));
+    }
+
+    .border-terminal-green {
+        border-color: oklch(var(--terminal-green));
+    }
+
+    .border-terminal-yellow {
+        border-color: oklch(var(--terminal-yellow));
+    }
+
+    /* Terminal box styling */
+    .terminal-box {
+        background-color: oklch(var(--terminal-black));
+        border: 1px solid oklch(var(--terminal-green) / 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .terminal-box:hover {
+        border-color: oklch(var(--terminal-green) / 0.6);
+    }
+
+    /* Terminal window styling */
+    .terminal-window {
+        background-color: oklch(var(--terminal-black));
+        border: 2px solid oklch(var(--terminal-green) / 0.5);
+        box-shadow: 0 0 20px oklch(var(--terminal-green) / 0.2);
+    }
+
+    .terminal-header {
+        background-color: oklch(var(--terminal-dark-gray));
+        border-bottom: 1px solid oklch(var(--terminal-green) / 0.3);
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .terminal-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .terminal-button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: oklch(var(--terminal-green) / 0.5);
+        border: 1px solid oklch(var(--terminal-green) / 0.7);
+    }
+
+    .terminal-title {
+        font-family: 'Courier New', monospace;
+        font-size: 0.875rem;
+        color: oklch(var(--terminal-white));
+    }
+
+    .terminal-body {
+        background-color: oklch(var(--terminal-black));
+    }
+
+    /* Cursor blink animation */
+    @keyframes cursor-blink {
+        0%, 49% {
+            opacity: 1;
+        }
+        50%, 100% {
+            opacity: 0;
+        }
+    }
+
+    .cursor-blink {
+        animation: cursor-blink 1s infinite;
+        display: inline-block;
+    }
+
+    /* Scanline effect */
+    .scanline-overlay {
+        background: repeating-linear-gradient(
+            0deg,
+            rgba(0, 255, 0, 0.03) 0px,
+            rgba(0, 255, 0, 0.03) 1px,
+            transparent 1px,
+            transparent 2px
+        );
+        animation: scanline-move 8s linear infinite;
+    }
+
+    @keyframes scanline-move {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(10px);
+        }
+    }
+
+    /* Fade in animation */
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fade-in 0.5s ease-out;
+    }
+}

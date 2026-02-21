@@ -1,0 +1,181 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-21T17:20:38.456Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 9,
+    "implemented": 9,
+    "items": [
+      {
+        "id": "REQ-19",
+        "summary": "Transform the entire portfolio UI to mimic a command-line terminal interface with monospace fonts (Courier New, Consolas, or Monaco), dark terminal background (black or dark gray), green terminal text as primary color, and blinking cursor animations",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-20",
+        "summary": "Replace section headings with CMD-style command prompts (e.g., 'C:\\Users\\SubodhRam> dir Education', 'C:\\Users\\SubodhRam> ipconfig /all' for networking sections, 'C:\\Users\\SubodhRam> tasklist' for projects)",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/Education.tsx",
+          "frontend/src/components/Skills.tsx",
+          "frontend/src/components/Experience.tsx",
+          "frontend/src/components/Projects.tsx",
+          "frontend/src/components/Certifications.tsx",
+          "frontend/src/components/Achievements.tsx",
+          "frontend/src/components/Contact.tsx",
+          "frontend/src/components/PersonalInfo.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/Education.tsx",
+          "frontend/src/components/Skills.tsx",
+          "frontend/src/components/Experience.tsx",
+          "frontend/src/components/Projects.tsx",
+          "frontend/src/components/Certifications.tsx",
+          "frontend/src/components/Achievements.tsx",
+          "frontend/src/components/Contact.tsx",
+          "frontend/src/components/PersonalInfo.tsx"
+        ]
+      },
+      {
+        "id": "REQ-21",
+        "summary": "Display section content with CMD output formatting including ASCII borders, pipe characters for tables, and terminal-style lists with bullet points replaced by command output symbols (>, -, *)",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/Education.tsx",
+          "frontend/src/components/Skills.tsx",
+          "frontend/src/components/Projects.tsx",
+          "frontend/src/components/Experience.tsx",
+          "frontend/src/components/Certifications.tsx",
+          "frontend/src/components/Achievements.tsx",
+          "frontend/src/components/Contact.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/Education.tsx",
+          "frontend/src/components/Skills.tsx",
+          "frontend/src/components/Projects.tsx",
+          "frontend/src/components/Experience.tsx",
+          "frontend/src/components/Certifications.tsx",
+          "frontend/src/components/Achievements.tsx",
+          "frontend/src/components/Contact.tsx"
+        ]
+      },
+      {
+        "id": "REQ-22",
+        "summary": "Add terminal-style typing animations for the Hero section where the name, title, and tagline appear character-by-character as if being typed in a CMD window",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/Hero.tsx",
+          "frontend/src/hooks/useTypingEffect.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/Hero.tsx",
+          "frontend/src/hooks/useTypingEffect.ts"
+        ]
+      },
+      {
+        "id": "REQ-23",
+        "summary": "Replace the Download Resume button with a CMD-style button displaying 'C:\\> download resume.pdf' with terminal green text on dark background and hover effect that adds a blinking cursor",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/Hero.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/Hero.tsx"
+        ]
+      },
+      {
+        "id": "REQ-24",
+        "summary": "Update the color scheme to use classic terminal colors: black/dark gray background, bright green (#00FF00) for primary text, white for secondary text, and yellow for highlights or warnings, removing the existing neon blue and purple theme",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js"
+        ],
+        "matchedFiles": [
+          "frontend/src/index.css",
+          "frontend/tailwind.config.js"
+        ]
+      },
+      {
+        "id": "REQ-25",
+        "summary": "Add scanline overlay effect across the entire viewport to simulate CRT monitor appearance and enhance the retro terminal aesthetic",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/ScanlineOverlay.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/index.css"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/ScanlineOverlay.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/index.css"
+        ]
+      },
+      {
+        "id": "REQ-26",
+        "summary": "Replace the network lines animation with ASCII art network diagrams or flowing text characters (like Matrix-style falling characters) that represent network packets and data flow",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/NetworkLines.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/NetworkLines.tsx",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-27",
+        "summary": "Format Skills section to display as CMD command output with commands like 'netstat -ano' for networking skills, 'python --version' for programming languages, and 'systeminfo' for IT tools",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/Skills.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/Skills.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "build-template/README.md",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/App.tsx",
+    "frontend/src/components/Achievements.tsx",
+    "frontend/src/components/Certifications.tsx",
+    "frontend/src/components/Contact.tsx",
+    "frontend/src/components/Education.tsx",
+    "frontend/src/components/Experience.tsx",
+    "frontend/src/components/Footer.tsx",
+    "frontend/src/components/Hero.tsx",
+    "frontend/src/components/NetworkLines.tsx",
+    "frontend/src/components/PersonalInfo.tsx",
+    "frontend/src/components/Projects.tsx",
+    "frontend/src/components/ScanlineOverlay.tsx",
+    "frontend/src/components/Skills.tsx",
+    "frontend/src/hooks/useTypingEffect.ts",
+    "frontend/src/index.css",
+    "frontend/tailwind.config.js",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

@@ -1,0 +1,338 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "Modern, futuristic portfolio website for Subodh Ram (MCA student, Mumbai) with command-line terminal aesthetic inspired by networking/CMD, dark theme with neon blue/purple highlights, animated network backgrounds, and sections for education, projects, internships, certifications, skills, achievements, and contact info",
+  "architectural_notes": [
+    "Single-page portfolio website with smooth scrolling sections",
+    "Dark theme with neon blue/purple color scheme for futuristic aesthetic",
+    "Animated background with network lines and smart city visuals",
+    "Component-based structure: Hero, Personal Info, Education, Projects, Internships, Certifications, Skills, Achievements, Contact",
+    "CSS animations for hover effects, scroll-triggered animations, and parallax",
+    "Responsive layout using CSS Grid/Flexbox for mobile and desktop",
+    "Professional typography and spacing optimized for recruiter viewing",
+    "Command-line/terminal aesthetic with CMD-style interface for networking theme",
+    "Monospace fonts and terminal-style prompts for professional developer feel"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-a-hero-section-displaying-subodh-ram-as-the-name-master-of-computer-applications-student-2024-2026-as-the-title-and-networking-it-infrastructure-enthusiast-as-the-tagline-with-subtle-animated-network-lines-and-data-flow-elements-in-the-background",
+      "title": "Create a Hero section displaying 'SUBODH RAM' as the name, 'Master of Computer Applications Student (2024–2026)' as the title, and 'Networking & IT Infrastructure Enthusiast' as the tagline, with subtle animated network lines and data flow elements in the background",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-personal-info-section-displaying-date-of-birth-28-04-2003",
+      "title": "Create a Personal Info section displaying Date of Birth: 28/04/2003",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-education-section-displaying-four-educational-institutions-with-their-details-mpstme-nmims-university-mca-2024-2026-cgpa-7-38-10-tolani-college-of-commerce-bsc-it-2020-2023-cgpa-8-28-10-chandrabhan-sharma-college-hsc-74-77-2018-2020-s-a-public-school-ssc-66-20-2018",
+      "title": "Create an Education section displaying four educational institutions with their details: MPSTME, NMIMS University – MCA (2024–2026), CGPA: 7.38/10; Tolani College of Commerce – BSc IT (2020–2023), CGPA: 8.28/10; Chandrabhan Sharma College – HSC: 74.77% (2018–2020); S.A Public School – SSC: 66.20% (2018)",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-projects-section-with-three-project-cards-including-hover-effects-1-smart-parking-system-2025-with-java-spring-boot-jsp-oracle-db-firebase-tech-stack-featuring-real-time-parking-discovery-pricing-booking-openstreetmap-integration-and-qr-based-secure-access-2-property-price-prediction-system-2025-with-react-node-js-python-mongodb-tech-stack-featuring-ai-based-property-price-prediction-and-interactive-dashboards-3-smarttech-connect-2025-with-react-node-js-mongodb-firebase-tech-stack-featuring-technician-booking-chat-community-and-ai-recommendations",
+      "title": "Create a Projects section with three project cards including hover effects: 1) Smart Parking System (2025) with Java, Spring Boot, JSP, Oracle DB, Firebase tech stack, featuring real-time parking discovery, pricing, booking, OpenStreetMap integration, and QR-based secure access; 2) Property Price Prediction System (2025) with React, Node.js, Python, MongoDB tech stack, featuring AI-based property price prediction and interactive dashboards; 3) SmartTech Connect (2025) with React, Node.js, MongoDB, Firebase tech stack, featuring technician booking, chat, community, and AI recommendations",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-internships-experience-section-with-two-detailed-work-experiences-1-aivariant-data-analysis-intern-nov-2023-may-2024-with-responsibilities-including-data-cleaning-preprocessing-statistical-analysis-using-excel-and-python-and-dashboard-creation-visualization-2-sunjewels-pvt-ltd-it-support-assistant-dec-2023-july-2024-with-responsibilities-including-user-account-management-access-roles-password-policies-network-security-monitoring-blocking-unauthorized-access-ip-addressing-subnetting-routing-dhcp-dns-nat-gateway-configuration-network-troubleshooting-using-wireshark-ping-traceroute-nmap-and-end-user-system-support",
+      "title": "Create an Internships & Experience section with two detailed work experiences: 1) Aivariant – Data Analysis Intern (Nov 2023 – May 2024) with responsibilities including data cleaning/preprocessing, statistical analysis using Excel and Python, and dashboard creation/visualization; 2) Sunjewels Pvt Ltd – IT Support Assistant (Dec 2023 – July 2024) with responsibilities including user account management, access roles, password policies, network security monitoring, blocking unauthorized access, IP addressing, subnetting, routing, DHCP/DNS/NAT/gateway configuration, network troubleshooting using Wireshark/ping/traceroute/Nmap, and end-user/system support",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-certifications-section-displaying-data-analytics-certification-from-excelr-aug-2023-jan-2024",
+      "title": "Create a Certifications section displaying Data Analytics Certification from ExcelR (Aug 2023 – Jan 2024)",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-skills-section-with-icons-or-progress-bars-displaying-technical-skills-programming-java-python-javascript-databases-mongodb-mysql-firebase-data-tools-power-bi-tableau-excel-data-visualization-networking-tcp-ip-subnetting-routing-switching-dhcp-dns-nat-firewall-configuration-tools-nmap-wireshark-it-system-security-user-access-management-and-soft-skills-problem-solving-team-collaboration-effective-communication-time-management",
+      "title": "Create a Skills section with icons or progress bars displaying Technical Skills (Programming: Java, Python, JavaScript; Databases: MongoDB, MySQL, Firebase; Data Tools: Power BI, Tableau, Excel, Data Visualization; Networking: TCP/IP, Subnetting, Routing & Switching, DHCP, DNS, NAT, Firewall Configuration; Tools: Nmap, Wireshark; IT: System Security, User Access Management) and Soft Skills (Problem-Solving, Team Collaboration, Effective Communication, Time Management)",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-achievements-section-highlighting-led-end-to-end-data-analysis-projects-converting-raw-data-into-meaningful-insights",
+      "title": "Create an Achievements section highlighting 'Led end-to-end data analysis projects converting raw data into meaningful insights'",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-contact-section-with-placeholders-for-phone-email-linkedin-and-github",
+      "title": "Create a Contact section with placeholders for Phone, Email, LinkedIn, and GitHub",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-dark-theme-with-neon-blue-and-purple-highlights-throughout-the-entire-portfolio-website",
+      "title": "Implement a dark theme with neon blue and purple highlights throughout the entire portfolio website",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-futuristic-smart-city-background-with-glowing-network-connections-visible-throughout-the-portfolio",
+      "title": "Add a futuristic smart city background with glowing network connections visible throughout the portfolio",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-smooth-scroll-animations-and-parallax-effects-throughout-the-portfolio-for-enhanced-user-experience",
+      "title": "Implement smooth scroll animations and parallax effects throughout the portfolio for enhanced user experience",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-animated-network-lines-that-visually-connect-different-sections-of-the-portfolio",
+      "title": "Add animated network lines that visually connect different sections of the portfolio",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-portfolio-is-fully-responsive-and-optimized-for-both-mobile-and-desktop-viewing",
+      "title": "Ensure the portfolio is fully responsive and optimized for both mobile and desktop viewing",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-download-resume-button-that-allows-users-to-download-subodh-ram-s-resume",
+      "title": "Add a Download Resume button that allows users to download Subodh Ram's resume",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-professional-typography-and-consistent-spacing-throughout-the-portfolio-to-ensure-recruiter-friendly-readability-and-clean-minimal-ui",
+      "title": "Apply professional typography and consistent spacing throughout the portfolio to ensure recruiter-friendly readability and clean minimal UI",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-a-futuristic-smart-city-background-image-with-glowing-network-connections-in-neon-blue-and-purple-tones-smart-city-bg-dim-1920x1080-png",
+      "title": "Generate a futuristic smart city background image with glowing network connections in neon blue and purple tones (smart-city-bg.dim_1920x1080.png)",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-render-all-generated-images-as-static-assets-in-frontend-public-assets-generated-and-reference-them-in-the-portfolio-ui",
+      "title": "Render all generated images as static assets in frontend/public/assets/generated and reference them in the portfolio UI",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-transform-the-entire-portfolio-ui-to-mimic-a-command-line-terminal-interface-with-monospace-fonts-courier-new-consolas-or-monaco-dark-terminal-background-black-or-dark-gray-green-terminal-text-as-primary-color-and-blinking-cursor-animations",
+      "title": "Transform the entire portfolio UI to mimic a command-line terminal interface with monospace fonts (Courier New, Consolas, or Monaco), dark terminal background (black or dark gray), green terminal text as primary color, and blinking cursor animations",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-section-headings-with-cmd-style-command-prompts-e-g-c-users-subodhram-dir-education-c-users-subodhram-ipconfig-all-for-networking-sections-c-users-subodhram-tasklist-for-projects",
+      "title": "Replace section headings with CMD-style command prompts (e.g., 'C:\\Users\\SubodhRam> dir Education', 'C:\\Users\\SubodhRam> ipconfig /all' for networking sections, 'C:\\Users\\SubodhRam> tasklist' for projects)",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-section-content-with-cmd-output-formatting-including-ascii-borders-pipe-characters-for-tables-and-terminal-style-lists-with-bullet-points-replaced-by-command-output-symbols",
+      "title": "Display section content with CMD output formatting including ASCII borders, pipe characters for tables, and terminal-style lists with bullet points replaced by command output symbols (>, -, *)",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-terminal-style-typing-animations-for-the-hero-section-where-the-name-title-and-tagline-appear-character-by-character-as-if-being-typed-in-a-cmd-window",
+      "title": "Add terminal-style typing animations for the Hero section where the name, title, and tagline appear character-by-character as if being typed in a CMD window",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-download-resume-button-with-a-cmd-style-button-displaying-c-download-resume-pdf-with-terminal-green-text-on-dark-background-and-hover-effect-that-adds-a-blinking-cursor",
+      "title": "Replace the Download Resume button with a CMD-style button displaying 'C:\\> download resume.pdf' with terminal green text on dark background and hover effect that adds a blinking cursor",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-color-scheme-to-use-classic-terminal-colors-black-dark-gray-background-bright-green-00ff00-for-primary-text-white-for-secondary-text-and-yellow-for-highlights-or-warnings-removing-the-existing-neon-blue-and-purple-theme",
+      "title": "Update the color scheme to use classic terminal colors: black/dark gray background, bright green (#00FF00) for primary text, white for secondary text, and yellow for highlights or warnings, removing the existing neon blue and purple theme",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-scanline-overlay-effect-across-the-entire-viewport-to-simulate-crt-monitor-appearance-and-enhance-the-retro-terminal-aesthetic",
+      "title": "Add scanline overlay effect across the entire viewport to simulate CRT monitor appearance and enhance the retro terminal aesthetic",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-network-lines-animation-with-ascii-art-network-diagrams-or-flowing-text-characters-like-matrix-style-falling-characters-that-represent-network-packets-and-data-flow",
+      "title": "Replace the network lines animation with ASCII art network diagrams or flowing text characters (like Matrix-style falling characters) that represent network packets and data flow",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-format-skills-section-to-display-as-cmd-command-output-with-commands-like-netstat-ano-for-networking-skills-python-version-for-programming-languages-and-systeminfo-for-it-tools",
+      "title": "Format Skills section to display as CMD command output with commands like 'netstat -ano' for networking skills, 'python --version' for programming languages, and 'systeminfo' for IT tools",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Hero section with name, title, tagline, and animated network lines background",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Personal info section displaying date of birth",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Education section with 4 educational institutions and grades",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Projects section with 3 project cards (Smart Parking, Property Price Prediction, SmartTech Connect) including hover effects",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Internships & Experience section with 2 detailed work experiences",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Certifications section displaying Data Analytics certification",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Skills section with technical and soft skills using icons or progress bars",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Achievements section highlighting data analysis leadership",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Contact section with placeholders for phone, email, LinkedIn, and GitHub",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Dark theme with neon blue and purple highlights throughout",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Futuristic smart city background with glowing network connections",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Smooth scroll animations and parallax effects",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Animated network lines connecting sections",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Responsive design for mobile and desktop",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Download Resume button",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Redesign portfolio with command-line/terminal aesthetic inspired by networking CMD interface for professional and creative look",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Subodh Ram Portfolio",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
