@@ -3,11 +3,11 @@
 const fs = require('fs');
 const path = require('path');
 
-// Simple PDF generation using HTML content
+// Paths
 const htmlPath = path.join(__dirname, 'build-template/src/frontend/public/assets/resume.html');
 const pdfPath = path.join(__dirname, 'build-template/src/frontend/public/assets/resume.pdf');
 
-console.log('📄 Generating PDF from HTML...');
+console.log('📄 Generating professional resume PDF...');
 
 // Check if HTML file exists
 if (!fs.existsSync(htmlPath)) {
@@ -15,108 +15,184 @@ if (!fs.existsSync(htmlPath)) {
     process.exit(1);
 }
 
-// For now, create a placeholder PDF with instructions
-const placeholderContent = `%PDF-1.4
+// Create a professional PDF with proper formatting
+// Note: For production, use puppeteer or similar tool to convert HTML to PDF
+// This creates a placeholder that instructs users to print from browser
+
+const pdfContent = `%PDF-1.4
 1 0 obj
-<<
-/Type /Catalog
-/Pages 2 0 R
->>
+<< /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<<
-/Type /Pages
-/Kids [3 0 R]
-/Count 1
->>
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
 endobj
 3 0 obj
 <<
 /Type /Page
 /Parent 2 0 R
-/Resources <<
-/Font <<
-/F1 4 0 R
->>
->>
+/Resources << /Font << /F1 4 0 R /F2 5 0 R >> >>
 /MediaBox [0 0 612 792]
-/Contents 5 0 R
+/Contents 6 0 R
 >>
 endobj
 4 0 obj
-<<
-/Type /Font
-/Subtype /Type1
-/BaseFont /Helvetica
->>
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
 endobj
 5 0 obj
-<<
-/Length 500
->>
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+6 0 obj
+<< /Length 2800 >>
 stream
 BT
 /F1 24 Tf
 50 750 Td
 (SUBODH RAM) Tj
 0 -30 Td
-/F1 12 Tf
+/F2 11 Tf
+(Master of Computer Applications Student) Tj
+0 -15 Td
+(Full Stack Developer & Network Engineer) Tj
+
+0 -40 Td
+/F1 14 Tf
+(CONTACT INFORMATION) Tj
+0 -20 Td
+/F2 10 Tf
 (Email: subodhram3350@gmail.com) Tj
-0 -20 Td
-(Phone: 9076314255) Tj
-0 -20 Td
+0 -15 Td
+(Phone: +91 9076314255) Tj
+0 -15 Td
 (LinkedIn: linkedin.com/in/subodhram) Tj
-0 -20 Td
+0 -15 Td
 (GitHub: github.com/subodh-001) Tj
-0 -40 Td
-/F1 16 Tf
-(EDUCATION) Tj
-0 -25 Td
-/F1 10 Tf
-(Master of Computer Applications - NMIMS University) Tj
 0 -15 Td
-(2024-2026 | CGPA: 7.38/10) Tj
+(DOB: 28 April 2003) Tj
+
+0 -35 Td
+/F1 14 Tf
+(PROFESSIONAL SUMMARY) Tj
+0 -20 Td
+/F2 10 Tf
+(Master of Computer Applications student specializing in Networking & IT) Tj
+0 -12 Td
+(Infrastructure. Experienced in data analysis, system security, and full-stack) Tj
+0 -12 Td
+(development with strong analytical and problem-solving capabilities.) Tj
+
 0 -30 Td
-/F1 16 Tf
-(SKILLS) Tj
-0 -25 Td
-/F1 10 Tf
-(Java, Python, JavaScript, React, Node.js, MongoDB) Tj
+/F1 14 Tf
+(EDUCATION) Tj
+0 -20 Td
+/F1 11 Tf
+(Master of Computer Applications \(MCA\)) Tj
 0 -15 Td
-(TCP/IP, Networking, Nmap, Wireshark, Power BI) Tj
-0 -40 Td
-/F1 16 Tf
-(EXPERIENCE) Tj
-0 -25 Td
-/F1 10 Tf
-(Data Analyst Intern - Aivariant | Aug 2023 - Jan 2024) Tj
-0 -40 Td
-/F1 8 Tf
-(For full resume, visit: /assets/resume.html) Tj
+/F2 10 Tf
+(MPSTME, NMIMS University | 2024 - 2026 | CGPA: 7.38/10) Tj
+0 -12 Td
+(Specialization: Networking & IT Infrastructure) Tj
+
+0 -20 Td
+/F1 11 Tf
+(Bachelor of Science in Information Technology) Tj
+0 -15 Td
+/F2 10 Tf
+(Tolani College of Commerce | 2020 - 2023 | CGPA: 8.28/10) Tj
+
+0 -30 Td
+/F1 14 Tf
+(TECHNICAL SKILLS) Tj
+0 -20 Td
+/F2 10 Tf
+(Programming: Java, Python, JavaScript, React.js, Node.js) Tj
+0 -12 Td
+(Databases: MongoDB, MySQL, Firebase, Oracle DB) Tj
+0 -12 Td
+(Networking: TCP/IP, Subnetting, Routing, DHCP, DNS, Nmap, Wireshark) Tj
+0 -12 Td
+(Tools: Power BI, Tableau, Excel, Git, Docker, Spring Boot) Tj
+
+0 -30 Td
+/F1 14 Tf
+(PROFESSIONAL EXPERIENCE) Tj
+0 -20 Td
+/F1 11 Tf
+(Data Analyst Intern - Aivariant) Tj
+0 -15 Td
+/F2 10 Tf
+(Aug 2023 - Jan 2024 | Remote) Tj
+0 -12 Td
+(- Analyzed large datasets to identify trends and patterns) Tj
+0 -12 Td
+(- Created interactive dashboards using Power BI and Tableau) Tj
+0 -12 Td
+(- Automated data processing workflows using Python) Tj
+
+0 -20 Td
+/F1 11 Tf
+(IT Support Specialist - Freelance) Tj
+0 -15 Td
+/F2 10 Tf
+(2022 - Present | Remote) Tj
+0 -12 Td
+(- Provided technical support for network configuration) Tj
+0 -12 Td
+(- Implemented security measures and access controls) Tj
+
+0 -30 Td
+/F1 14 Tf
+(FEATURED PROJECTS) Tj
+0 -20 Td
+/F1 11 Tf
+(Smart Parking System \(2025\)) Tj
+0 -15 Td
+/F2 10 Tf
+(Tech: Java, Spring Boot, Oracle DB, Firebase) Tj
+0 -12 Td
+(Real-time parking discovery, dynamic pricing, QR-based access control) Tj
+
+0 -20 Td
+/F1 11 Tf
+(Property Price Prediction Platform \(2025\)) Tj
+0 -15 Td
+/F2 10 Tf
+(Tech: React, Node.js, Python, MongoDB) Tj
+0 -12 Td
+(AI-powered price prediction with interactive dashboards) Tj
+
+0 -30 Td
+/F1 14 Tf
+(CERTIFICATIONS) Tj
+0 -20 Td
+/F2 10 Tf
+(Data Analytics Professional Certificate - ExcelR \(Aug 2023 - Jan 2024\)) Tj
+
+0 -30 Td
+/F2 9 Tf
+(For detailed resume with full project descriptions, visit:) Tj
+0 -12 Td
+(https://subodh-ram-portfolio.vercel.app/assets/resume.html) Tj
 ET
 endstream
 endobj
 xref
-0 6
+0 7
 0000000000 65535 f
 0000000009 00000 n
 0000000058 00000 n
 0000000115 00000 n
 0000000262 00000 n
-0000000341 00000 n
+0000000345 00000 n
+0000000423 00000 n
 trailer
-<<
-/Size 6
-/Root 1 0 R
->>
+<< /Size 7 /Root 1 0 R >>
 startxref
-892
+3273
 %%EOF`;
 
-fs.writeFileSync(pdfPath, placeholderContent);
-console.log('✅ PDF generated successfully!');
+// Write the PDF file
+fs.writeFileSync(pdfPath, pdfContent);
+
+console.log('✅ Professional resume PDF generated successfully!');
 console.log(`📍 Location: ${pdfPath}`);
-console.log('\n💡 Note: For a full PDF, you can:');
-console.log('   1. Open /assets/resume.html in browser');
-console.log('   2. Print to PDF (Ctrl+P)');
-console.log('   3. Save as resume.pdf in public/assets/');
+console.log('💡 Tip: For best results, print the HTML version from your browser');
