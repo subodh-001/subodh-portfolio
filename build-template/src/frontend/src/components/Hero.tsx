@@ -106,38 +106,65 @@ export default function Hero() {
 
             {tagline.isComplete && (
               <div className="mt-8 animate-fade-in">
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2 mb-4">
                   <span className="text-terminal-green">root@subodh-ram:~#</span>
                   <span className="text-terminal-white">wget https://subodh-ram.dev/resume.pdf</span>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  {/* Download Resume Button */}
                   <Button
                     size="lg"
-                    className="bg-transparent border-2 border-terminal-green text-terminal-green hover:bg-terminal-green/20 hover:shadow-[0_0_20px_rgba(0,255,0,0.3)] font-mono px-6 py-3 text-base transition-all duration-300 group"
+                    className="relative overflow-hidden bg-gradient-to-r from-terminal-green/10 to-terminal-green/5 border-2 border-terminal-green text-terminal-green hover:border-terminal-green hover:bg-terminal-green/20 hover:shadow-[0_0_30px_rgba(0,255,0,0.4),inset_0_0_20px_rgba(0,255,0,0.1)] font-mono px-8 py-4 text-base transition-all duration-300 group backdrop-blur-sm"
                     asChild
                   >
-                    <a href="/assets/resume.pdf" download="Subodh_Ram_Resume.pdf" className="flex items-center gap-2">
-                      <Download className="h-5 w-5 group-hover:animate-bounce" />
-                      <span>DOWNLOAD_RESUME.pdf</span>
-                      <span className="opacity-0 group-hover:opacity-100 cursor-blink transition-opacity">█</span>
+                    <a href="/assets/resume.pdf" download="Subodh_Ram_Resume.pdf" className="flex items-center gap-3">
+                      <div className="relative">
+                        <Download className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
+                        <div className="absolute inset-0 bg-terminal-green/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      </div>
+                      <div className="flex flex-col items-start">
+                        <span className="text-sm font-bold tracking-wider">DOWNLOAD RESUME</span>
+                        <span className="text-xs text-terminal-green/70 group-hover:text-terminal-green transition-colors">.pdf • 245KB</span>
+                      </div>
+                      <span className="ml-2 opacity-0 group-hover:opacity-100 cursor-blink transition-opacity duration-300 animate-pulse">█</span>
+                      {/* Animated border effect */}
+                      <div className="absolute inset-0 border-2 border-terminal-green opacity-0 group-hover:opacity-100 animate-pulse"></div>
                     </a>
                   </Button>
+
+                  {/* View Resume Button */}
                   <Button
                     size="lg"
-                    className="bg-transparent border-2 border-terminal-yellow text-terminal-yellow hover:bg-terminal-yellow/20 hover:shadow-[0_0_20px_rgba(255,255,0,0.3)] font-mono px-6 py-3 text-base transition-all duration-300 group"
+                    className="relative overflow-hidden bg-gradient-to-r from-terminal-yellow/10 to-terminal-yellow/5 border-2 border-terminal-yellow text-terminal-yellow hover:border-terminal-yellow hover:bg-terminal-yellow/20 hover:shadow-[0_0_30px_rgba(255,255,0,0.4),inset_0_0_20px_rgba(255,255,0,0.1)] font-mono px-8 py-4 text-base transition-all duration-300 group backdrop-blur-sm"
                     asChild
                   >
-                    <a href="/assets/resume.html" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                      <span>👁</span>
-                      <span>VIEW_RESUME</span>
-                      <span className="opacity-0 group-hover:opacity-100 cursor-blink transition-opacity">█</span>
+                    <a href="/assets/resume.html" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3">
+                      <div className="relative">
+                        <span className="text-2xl group-hover:scale-110 transition-transform duration-300 inline-block">👁</span>
+                        <div className="absolute inset-0 bg-terminal-yellow/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      </div>
+                      <div className="flex flex-col items-start">
+                        <span className="text-sm font-bold tracking-wider">VIEW RESUME</span>
+                        <span className="text-xs text-terminal-yellow/70 group-hover:text-terminal-yellow transition-colors">Open in browser</span>
+                      </div>
+                      <span className="ml-2 opacity-0 group-hover:opacity-100 cursor-blink transition-opacity duration-300 animate-pulse">█</span>
+                      {/* Animated border effect */}
+                      <div className="absolute inset-0 border-2 border-terminal-yellow opacity-0 group-hover:opacity-100 animate-pulse"></div>
                     </a>
                   </Button>
                 </div>
-                <div className="mt-2 text-xs font-mono text-terminal-gray">
-                  <span className="text-terminal-green">--{new Date().toISOString().split('T')[0]}</span> Connecting to server...
-                  <div className="mt-1">
-                    <span className="text-terminal-green">[OK]</span> Resume ready for download
+                <div className="mt-4 text-xs font-mono text-terminal-gray space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-terminal-green">--{new Date().toISOString().split('T')[0]}</span> 
+                    <span className="animate-pulse">Connecting to server...</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-terminal-green">[✓]</span> 
+                    <span>Resume ready for download</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-terminal-green/60">
+                    <span>→</span>
+                    <span>Last updated: {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
                   </div>
                 </div>
               </div>
