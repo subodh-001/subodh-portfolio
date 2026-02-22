@@ -93,19 +93,19 @@ const projects = [
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="projects" className="py-12 sm:py-20 px-3 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-terminal-green font-mono">root@subodh-ram:~#</span>
-            <span className="text-terminal-white font-mono">ps aux | grep "project" | grep -v grep</span>
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto">
+            <span className="text-terminal-green font-mono whitespace-nowrap">root@subodh-ram:~#</span>
+            <span className="text-terminal-white font-mono whitespace-nowrap">ps aux | grep "project" | grep -v grep</span>
           </div>
-          <div className="h-px bg-terminal-green/30 mb-6" />
+          <div className="h-px bg-terminal-green/30 mb-4 sm:mb-6" />
         </div>
 
-        <div className="terminal-box p-6 mb-6">
-          <div className="font-mono text-terminal-white text-xs mb-4 overflow-x-auto">
-            <div className="grid grid-cols-[200px_80px_100px_80px_80px] gap-4 pb-2 border-b border-terminal-green/30">
+        <div className="terminal-box p-3 sm:p-6 mb-4 sm:mb-6">
+          <div className="font-mono text-terminal-white text-[10px] sm:text-xs mb-4 overflow-x-auto">
+            <div className="hidden sm:grid grid-cols-[200px_80px_100px_80px_80px] gap-4 pb-2 border-b border-terminal-green/30">
               <div className="text-terminal-yellow">Image Name</div>
               <div className="text-terminal-yellow">PID</div>
               <div className="text-terminal-yellow">Status</div>
@@ -114,15 +114,31 @@ export default function Projects() {
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {projects.map((project, index) => (
               <div
                 key={index}
-                className="terminal-box p-4 hover:border-terminal-yellow/50 transition-all duration-300 group"
+                className="terminal-box p-3 sm:p-4 hover:border-terminal-yellow/50 transition-all duration-300 group"
               >
                 <div className="font-mono">
-                  <div className="grid grid-cols-1 sm:grid-cols-[200px_80px_100px_80px_80px] gap-2 sm:gap-4 mb-4 text-xs">
-                    <div className="text-terminal-green group-hover:text-terminal-yellow transition-colors">
+                  {/* Mobile: Stacked layout */}
+                  <div className="block sm:hidden mb-3 space-y-2 text-[10px]">
+                    <div className="text-terminal-green group-hover:text-terminal-yellow transition-colors break-words">
+                      {project.name}<span className="text-terminal-gray">.exe</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-[10px]">
+                      <span className="text-terminal-white">{project.pid}</span>
+                      <span className="text-terminal-green flex items-center gap-1">
+                        <span className="animate-pulse">●</span> {project.status}
+                      </span>
+                      <span className="text-terminal-yellow">{project.uptime}</span>
+                      <span className="text-terminal-gray">{project.year}</span>
+                    </div>
+                  </div>
+
+                  {/* Desktop: Grid layout */}
+                  <div className="hidden sm:grid grid-cols-[200px_80px_100px_80px_80px] gap-4 mb-4 text-xs">
+                    <div className="text-terminal-green group-hover:text-terminal-yellow transition-colors break-words">
                       {project.name}<span className="text-terminal-gray">.exe</span>
                     </div>
                     <div className="text-terminal-white">{project.pid}</div>
@@ -135,9 +151,9 @@ export default function Projects() {
 
                   {/* Metrics */}
                   {project.metrics && (
-                    <div className="mb-3 flex flex-wrap gap-3 text-xs">
+                    <div className="mb-3 flex flex-wrap gap-2 text-[10px] sm:text-xs">
                       {Object.entries(project.metrics).map(([key, value], i) => (
-                        <div key={i} className="bg-terminal-green/10 border border-terminal-green/30 px-3 py-1 rounded">
+                        <div key={i} className="bg-terminal-green/10 border border-terminal-green/30 px-2 py-1 sm:px-3 rounded">
                           <span className="text-terminal-yellow">{key}:</span>{' '}
                           <span className="text-terminal-white">{value}</span>
                         </div>
@@ -146,13 +162,13 @@ export default function Projects() {
                   )}
 
                   <div className="mb-3">
-                    <div className="text-terminal-yellow text-xs mb-2">Tech Stack:</div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="text-terminal-yellow text-[10px] sm:text-xs mb-2">Tech Stack:</div>
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
                       {project.technologies.map((tech, i) => (
                         <Badge
                           key={i}
                           variant="secondary"
-                          className="font-mono text-xs bg-transparent border border-terminal-green/30 text-terminal-white hover:border-terminal-green hover:bg-terminal-green/10 transition-all"
+                          className="font-mono text-[10px] sm:text-xs bg-transparent border border-terminal-green/30 text-terminal-white hover:border-terminal-green hover:bg-terminal-green/10 transition-all"
                         >
                           {tech}
                         </Badge>
@@ -161,12 +177,12 @@ export default function Projects() {
                   </div>
 
                   <div>
-                    <div className="text-terminal-yellow text-xs mb-2">Features:</div>
+                    <div className="text-terminal-yellow text-[10px] sm:text-xs mb-2">Features:</div>
                     <div className="space-y-1">
                       {project.features.map((feature, i) => (
-                        <div key={i} className="text-terminal-white text-xs flex items-start gap-2">
-                          <span className="text-terminal-green">•</span>
-                          <span>{feature}</span>
+                        <div key={i} className="text-terminal-white text-[10px] sm:text-xs flex items-start gap-2">
+                          <span className="text-terminal-green flex-shrink-0">•</span>
+                          <span className="break-words">{feature}</span>
                         </div>
                       ))}
                     </div>

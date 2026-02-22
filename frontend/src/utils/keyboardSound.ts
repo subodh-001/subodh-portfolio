@@ -2,32 +2,56 @@
 // This keyboard uses Blue switches (clicky and tactile)
 class KeyboardSound {
   private enabled: boolean = true;
-  private sounds: HTMLAudioElement[] = [];
-  private currentIndex: number = 0;
+  private audioContext: AudioContext | null = null;
 
   constructor() {
     if (typeof window !== 'undefined') {
-      this.initSounds();
+      try {
+        this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      } catch (e) {
+        console.warn('Web Audio API not supported');
+      }
     }
   }
 
-  // Initialize audio elements with Blue switch mechanical keyboard sound
-  private initSounds() {
-    // Using multiple sound sources for Blue switch keyboards
-    // These sound like Redragon Kumara K552 (Blue switches)
-    const soundUrls = [
-      'https://www.myinstants.com/media/sounds/cherry-mx-blue.mp3',
-      'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3',
-      'https://freesound.org/data/previews/387/387186_7255534-lq.mp3'
-    ];
+  // Generate realistic mechanical keyboard click sound
+  private generateClickSound() {
+    if (!this.audioContext) return;
+
+    const now = this.audioContext.currentTime;
     
-    // Create multiple audio elements for smooth rapid typing
-    for (let i = 0; i < 30; i++) {
-      const audio = new Audio(soundUrls[i % soundUrls.length]);
-      audio.volume = 0.3; // Slightly louder for Blue switches
-      audio.preload = 'auto';
-      this.sounds.push(audio);
-    }
+    // Create multiple oscillators for richer sound
+    const oscillator1 = this.audioContext.createOscillator();
+    const oscillator2 = this.audioContext.createOscillator();
+    const gainNode = this.audioContext.createGain();
+    const filter = this.audioContext.createBiquadFilter();
+    
+    oscillator1.connect(filter);
+    oscillator2.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(this.audioContext.destination);
+    
+    // Blue switch characteristics: crisp, clicky sound
+    oscillator1.type = 'square';
+    oscillator1.frequency.setValueAtTime(1200, now);
+    oscillator1.frequency.exponentialRampToValueAtTime(200, now + 0.02);
+    
+    oscillator2.type = 'sine';
+    oscillator2.frequency.setValueAtTime(2400, now);
+    oscillator2.frequency.exponentialRampToValueAtTime(400, now + 0.015);
+    
+    // High-pass filter for crisp sound
+    filter.type = 'highpass';
+    filter.frequency.setValueAtTime(300, now);
+    
+    // Volume envelope for mechanical click
+    gainNode.gain.setValueAtTime(0.2, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
+    
+    oscillator1.start(now);
+    oscillator1.stop(now + 0.04);
+    oscillator2.start(now);
+    oscillator2.stop(now + 0.04);
   }
 
   // Play mechanical keyboard sound (Blue switch style)
@@ -35,26 +59,62 @@ class KeyboardSound {
     if (!this.enabled) return;
 
     try {
-      const audio = this.sounds[this.currentIndex];
-      audio.currentTime = 0;
-      audio.play().catch(() => {
-        // Silently handle play errors
-      });
-      
-      this.currentIndex = (this.currentIndex + 1) % this.sounds.length;
+      this.generateClickSound();
     } catch (error) {
       // Ignore errors
     }
   }
 
-  // Play spacebar sound
+  // Play spacebar sound (slightly deeper)
   playSpacebarPress() {
-    this.playKeyPress();
+    if (!this.enabled || !this.audioContext) return;
+
+    try {
+      const now = this.audioContext.currentTime;
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
+      
+      oscillator.type = 'square';
+      oscillator.frequency.setValueAtTime(600, now);
+      oscillator.frequency.exponentialRampToValueAtTime(150, now + 0.03);
+      
+      gainNode.gain.setValueAtTime(0.25, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+      
+      oscillator.start(now);
+      oscillator.stop(now + 0.05);
+    } catch (error) {
+      // Ignore errors
+    }
   }
 
-  // Play enter key sound
+  // Play enter key sound (more pronounced)
   playEnterPress() {
-    this.playKeyPress();
+    if (!this.enabled || !this.audioContext) return;
+
+    try {
+      const now = this.audioContext.currentTime;
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
+      
+      oscillator.type = 'square';
+      oscillator.frequency.setValueAtTime(1500, now);
+      oscillator.frequency.exponentialRampToValueAtTime(250, now + 0.04);
+      
+      gainNode.gain.setValueAtTime(0.3, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+      
+      oscillator.start(now);
+      oscillator.stop(now + 0.06);
+    } catch (error) {
+      // Ignore errors
+    }
   }
 
   // Play typing sound for multiple characters
@@ -62,7 +122,14 @@ class KeyboardSound {
     let index = 0;
     const typeInterval = setInterval(() => {
       if (index < text.length) {
-        this.playKeyPress();
+        const char = text[index];
+        if (char === ' ') {
+          this.playSpacebarPress();
+        } else if (char === '\n') {
+          this.playEnterPress();
+        } else {
+          this.playKeyPress();
+        }
         index++;
       } else {
         clearInterval(typeInterval);

@@ -66,64 +66,64 @@ const experiences = [
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="experience" className="py-12 sm:py-20 px-3 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-terminal-green font-mono">root@subodh-ram:~#</span>
-            <span className="text-terminal-white font-mono">netstat -tupln | grep ESTABLISHED</span>
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto">
+            <span className="text-terminal-green font-mono whitespace-nowrap">root@subodh-ram:~#</span>
+            <span className="text-terminal-white font-mono whitespace-nowrap">netstat -tupln | grep ESTABLISHED</span>
           </div>
-          <div className="h-px bg-terminal-green/30 mb-6" />
+          <div className="h-px bg-terminal-green/30 mb-4 sm:mb-6" />
         </div>
 
-        <div className="terminal-box p-6">
-          <div className="font-mono text-terminal-white text-xs mb-4">
+        <div className="terminal-box p-3 sm:p-6">
+          <div className="font-mono text-terminal-white text-[10px] sm:text-xs mb-4">
             <div className="mb-2 text-terminal-yellow flex items-center gap-2">
               <span className="text-terminal-green">[ACTIVE]</span> Professional Connections
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {experiences.map((exp, index) => (
               <div
                 key={index}
-                className="terminal-box p-4 hover:border-terminal-yellow/50 hover:shadow-[0_0_15px_rgba(0,255,0,0.1)] transition-all duration-300"
+                className="terminal-box p-3 sm:p-4 hover:border-terminal-yellow/50 hover:shadow-[0_0_15px_rgba(0,255,0,0.1)] transition-all duration-300"
               >
                 <div className="font-mono">
                   <div className="mb-3">
-                    <div className="text-terminal-green text-sm font-bold mb-1 flex items-center gap-2">
-                      <span className="text-terminal-yellow">►</span>
-                      {exp.company} - {exp.role}
+                    <div className="text-terminal-green text-xs sm:text-sm font-bold mb-1 flex items-start gap-2 break-words">
+                      <span className="text-terminal-yellow flex-shrink-0">►</span>
+                      <span>{exp.company} - {exp.role}</span>
                     </div>
-                    <div className="text-terminal-gray text-xs flex flex-wrap gap-3">
-                      <span>⏱ {exp.period}</span>
-                      <span>│</span>
-                      <span>⌛ {exp.duration}</span>
-                      <span>│</span>
-                      <span>📍 {exp.location}</span>
-                      <span>│</span>
-                      <span className="text-terminal-yellow">{exp.type}</span>
+                    <div className="text-terminal-gray text-[10px] sm:text-xs flex flex-wrap gap-2 sm:gap-3">
+                      <span className="whitespace-nowrap">⏱ {exp.period}</span>
+                      <span className="hidden sm:inline">│</span>
+                      <span className="whitespace-nowrap">⌛ {exp.duration}</span>
+                      <span className="hidden sm:inline">│</span>
+                      <span className="whitespace-nowrap">📍 {exp.location}</span>
+                      <span className="hidden sm:inline">│</span>
+                      <span className="text-terminal-yellow whitespace-nowrap">{exp.type}</span>
                     </div>
                   </div>
 
-                  <div className="border-l-2 border-terminal-green/30 pl-4 hover:border-terminal-yellow/50 transition-colors mb-3">
-                    <div className="text-terminal-yellow text-xs mb-2">[RESPONSIBILITIES]</div>
+                  <div className="border-l-2 border-terminal-green/30 pl-3 sm:pl-4 hover:border-terminal-yellow/50 transition-colors mb-3">
+                    <div className="text-terminal-yellow text-[10px] sm:text-xs mb-2">[RESPONSIBILITIES]</div>
                     <div className="space-y-1">
                       {exp.responsibilities.map((resp, i) => (
-                        <div key={i} className="text-terminal-white text-xs flex items-start gap-2">
-                          <span className="text-terminal-green">✓</span>
-                          <span>{resp}</span>
+                        <div key={i} className="text-terminal-white text-[10px] sm:text-xs flex items-start gap-2">
+                          <span className="text-terminal-green flex-shrink-0">✓</span>
+                          <span className="break-words">{resp}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   {exp.achievements && (
-                    <div className="border-l-2 border-terminal-yellow/30 pl-4">
-                      <div className="text-terminal-yellow text-xs mb-2">[KEY ACHIEVEMENTS]</div>
+                    <div className="border-l-2 border-terminal-yellow/30 pl-3 sm:pl-4">
+                      <div className="text-terminal-yellow text-[10px] sm:text-xs mb-2">[KEY ACHIEVEMENTS]</div>
                       <div className="flex flex-wrap gap-2">
                         {exp.achievements.map((achievement, i) => (
-                          <div key={i} className="bg-terminal-yellow/10 border border-terminal-yellow/30 px-2 py-1 rounded text-xs text-terminal-white">
+                          <div key={i} className="bg-terminal-yellow/10 border border-terminal-yellow/30 px-2 py-1 rounded text-[10px] sm:text-xs text-terminal-white break-words">
                             🏆 {achievement}
                           </div>
                         ))}

@@ -61,85 +61,85 @@ export const useKeyboardSound = (enabled: boolean = true) => {
 
       const now = ctx.currentTime;
 
-    // Determine key type for appropriate sound
-    let freqRange = KEYBOARD_SOUNDS.frequencies.regular;
-    if (key === ' ') {
-      freqRange = KEYBOARD_SOUNDS.frequencies.space;
-    } else if (['Shift', 'Control', 'Alt', 'Meta', 'Tab', 'CapsLock'].includes(key)) {
-      freqRange = KEYBOARD_SOUNDS.frequencies.modifier;
-    } else if (key === 'Enter') {
-      freqRange = KEYBOARD_SOUNDS.frequencies.enter;
-    }
+      // Determine key type for appropriate sound
+      let freqRange = KEYBOARD_SOUNDS.frequencies.regular;
+      if (key === ' ') {
+        freqRange = KEYBOARD_SOUNDS.frequencies.space;
+      } else if (['Shift', 'Control', 'Alt', 'Meta', 'Tab', 'CapsLock'].includes(key)) {
+        freqRange = KEYBOARD_SOUNDS.frequencies.modifier;
+      } else if (key === 'Enter') {
+        freqRange = KEYBOARD_SOUNDS.frequencies.enter;
+      }
 
-    // Add slight randomization for natural variation
-    const baseFreq = freqRange.min + Math.random() * (freqRange.max - freqRange.min);
-    const variation = 0.95 + Math.random() * 0.1; // ±5% variation
-    const frequency = baseFreq * variation;
+      // Add slight randomization for natural variation
+      const baseFreq = freqRange.min + Math.random() * (freqRange.max - freqRange.min);
+      const variation = 0.95 + Math.random() * 0.1; // ±5% variation
+      const frequency = baseFreq * variation;
 
-    // Create oscillator for the main "thock" sound
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
-    const filterNode = ctx.createBiquadFilter();
+      // Create oscillator for the main "thock" sound
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      const filterNode = ctx.createBiquadFilter();
 
-    // Gasket mount creates a dampened, muted sound
-    oscillator.type = 'triangle'; // Warmer than sine, less harsh than square
-    oscillator.frequency.setValueAtTime(frequency, now);
-    
-    // Low-pass filter for that muted gasket sound
-    filterNode.type = 'lowpass';
-    filterNode.frequency.setValueAtTime(800, now);
-    filterNode.Q.setValueAtTime(1, now);
+      // Gasket mount creates a dampened, muted sound
+      oscillator.type = 'triangle'; // Warmer than sine, less harsh than square
+      oscillator.frequency.setValueAtTime(frequency, now);
+      
+      // Low-pass filter for that muted gasket sound
+      filterNode.type = 'lowpass';
+      filterNode.frequency.setValueAtTime(800, now);
+      filterNode.Q.setValueAtTime(1, now);
 
-    // ADSR envelope for realistic key press
-    const { attack, decay, sustain, release } = KEYBOARD_SOUNDS.duration;
-    const peakVolume = KEYBOARD_SOUNDS.volume * (0.8 + Math.random() * 0.4); // Variation
-    
-    gainNode.gain.setValueAtTime(0, now);
-    gainNode.gain.linearRampToValueAtTime(peakVolume, now + attack);
-    gainNode.gain.linearRampToValueAtTime(peakVolume * 0.6, now + attack + decay);
-    gainNode.gain.setValueAtTime(peakVolume * 0.6, now + attack + decay + sustain);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, now + attack + decay + sustain + release);
+      // ADSR envelope for realistic key press
+      const { attack, decay, sustain, release } = KEYBOARD_SOUNDS.duration;
+      const peakVolume = KEYBOARD_SOUNDS.volume * (0.8 + Math.random() * 0.4); // Variation
+      
+      gainNode.gain.setValueAtTime(0, now);
+      gainNode.gain.linearRampToValueAtTime(peakVolume, now + attack);
+      gainNode.gain.linearRampToValueAtTime(peakVolume * 0.6, now + attack + decay);
+      gainNode.gain.setValueAtTime(peakVolume * 0.6, now + attack + decay + sustain);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, now + attack + decay + sustain + release);
 
-    // Add subtle noise for texture (simulates plastic/keycap sound)
-    const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.1, ctx.sampleRate);
-    const noiseData = noiseBuffer.getChannelData(0);
-    for (let i = 0; i < noiseData.length; i++) {
-      noiseData[i] = (Math.random() * 2 - 1) * 0.1;
-    }
-    
-    const noiseSource = ctx.createBufferSource();
-    const noiseGain = ctx.createGain();
-    const noiseFilter = ctx.createBiquadFilter();
-    
-    noiseSource.buffer = noiseBuffer;
-    noiseFilter.type = 'bandpass';
-    noiseFilter.frequency.setValueAtTime(2000, now);
-    noiseFilter.Q.setValueAtTime(2, now);
-    
-    noiseGain.gain.setValueAtTime(0, now);
-    noiseGain.gain.linearRampToValueAtTime(0.15, now + 0.002);
-    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+      // Add subtle noise for texture (simulates plastic/keycap sound)
+      const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.1, ctx.sampleRate);
+      const noiseData = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < noiseData.length; i++) {
+        noiseData[i] = (Math.random() * 2 - 1) * 0.1;
+      }
+      
+      const noiseSource = ctx.createBufferSource();
+      const noiseGain = ctx.createGain();
+      const noiseFilter = ctx.createBiquadFilter();
+      
+      noiseSource.buffer = noiseBuffer;
+      noiseFilter.type = 'bandpass';
+      noiseFilter.frequency.setValueAtTime(2000, now);
+      noiseFilter.Q.setValueAtTime(2, now);
+      
+      noiseGain.gain.setValueAtTime(0, now);
+      noiseGain.gain.linearRampToValueAtTime(0.15, now + 0.002);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
 
-    // Connect nodes
-    oscillator.connect(filterNode);
-    filterNode.connect(gainNode);
-    gainNode.connect(ctx.destination);
-    
-    noiseSource.connect(noiseFilter);
-    noiseFilter.connect(noiseGain);
-    noiseGain.connect(ctx.destination);
+      // Connect nodes
+      oscillator.connect(filterNode);
+      filterNode.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      
+      noiseSource.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
 
-    // Start and stop
-    oscillator.start(now);
-    noiseSource.start(now);
-    
-    const totalDuration = attack + decay + sustain + release;
-    oscillator.stop(now + totalDuration);
-    noiseSource.stop(now + 0.03);
+      // Start and stop
+      oscillator.start(now);
+      noiseSource.start(now);
+      
+      const totalDuration = attack + decay + sustain + release;
+      oscillator.stop(now + totalDuration);
+      noiseSource.stop(now + 0.03);
+
     } catch (error) {
-      console.error('Error playing keyboard sound:', error);
+      console.error('Error playing key sound:', error);
     }
-
   }, [initAudioContext]);
 
   // Attach global keyboard listener

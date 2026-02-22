@@ -65,39 +65,39 @@ const softSkills = [
 
 export default function Skills() {
   return (
-    <section id="skills" className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="skills" className="py-12 sm:py-20 px-3 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-terminal-green font-mono">root@subodh-ram:~#</span>
-            <span className="text-terminal-white font-mono">cat /etc/skills.conf</span>
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto">
+            <span className="text-terminal-green font-mono whitespace-nowrap">root@subodh-ram:~#</span>
+            <span className="text-terminal-white font-mono whitespace-nowrap">cat /etc/skills.conf</span>
           </div>
-          <div className="h-px bg-terminal-green/30 mb-6" />
+          <div className="h-px bg-terminal-green/30 mb-4 sm:mb-6" />
         </div>
 
         {/* Technical Skills */}
-        <div className="mb-12">
-          <div className="terminal-box p-6">
-            <div className="font-mono text-terminal-yellow text-sm mb-6 flex items-center gap-2">
+        <div className="mb-8 sm:mb-12">
+          <div className="terminal-box p-3 sm:p-6">
+            <div className="font-mono text-terminal-yellow text-[10px] sm:text-sm mb-4 sm:mb-6 flex items-center gap-2">
               <span className="text-terminal-green">[SYSTEM]</span> Technical Skills Configuration
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {technicalSkills.map((category, index) => (
-                <div key={index} className="border-l-2 border-terminal-green/30 pl-4 hover:border-terminal-yellow/50 transition-colors">
-                  <div className="font-mono mb-3">
-                    <div className="text-terminal-gray text-xs mb-1">
-                      $ {category.command}
+                <div key={index} className="border-l-2 border-terminal-green/30 pl-3 sm:pl-4 hover:border-terminal-yellow/50 transition-colors">
+                  <div className="font-mono mb-2 sm:mb-3">
+                    <div className="text-terminal-gray text-[10px] sm:text-xs mb-1 overflow-x-auto">
+                      <span className="whitespace-nowrap">$ {category.command}</span>
                     </div>
-                    <div className="text-terminal-green text-sm font-bold mb-2">
+                    <div className="text-terminal-green text-xs sm:text-sm font-bold mb-2">
                       [{category.category.toUpperCase()}]
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1 sm:gap-2">
                     {category.skills.map((skill, i) => (
                       <span
                         key={i}
-                        className="font-mono text-xs px-3 py-1 bg-terminal-green/10 text-terminal-white border border-terminal-green/30 hover:border-terminal-green hover:bg-terminal-green/20 hover:shadow-[0_0_10px_rgba(0,255,0,0.2)] transition-all cursor-default"
+                        className="font-mono text-[10px] sm:text-xs px-2 py-1 sm:px-3 bg-terminal-green/10 text-terminal-white border border-terminal-green/30 hover:border-terminal-green hover:bg-terminal-green/20 hover:shadow-[0_0_10px_rgba(0,255,0,0.2)] transition-all cursor-default"
                       >
                         {skill}
                       </span>
@@ -112,17 +112,17 @@ export default function Skills() {
         {/* Soft Skills */}
         <div>
           <div className="mb-4">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-terminal-green font-mono">root@subodh-ram:~#</span>
-              <span className="text-terminal-white font-mono">cat /proc/soft_skills</span>
+            <div className="flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto">
+              <span className="text-terminal-green font-mono whitespace-nowrap">root@subodh-ram:~#</span>
+              <span className="text-terminal-white font-mono whitespace-nowrap">cat /proc/soft_skills</span>
             </div>
           </div>
 
-          <div className="terminal-box p-6">
+          <div className="terminal-box p-3 sm:p-6">
             <div className="font-mono">
               {softSkills.map((skill, index) => (
-                <div key={index} className="text-terminal-white text-sm mb-2 flex items-center gap-2 hover:text-terminal-yellow transition-colors">
-                  <span className="text-terminal-green">✓</span>
+                <div key={index} className="text-terminal-white text-xs sm:text-sm mb-2 flex items-center gap-2 hover:text-terminal-yellow transition-colors">
+                  <span className="text-terminal-green flex-shrink-0">✓</span>
                   <span>{skill}</span>
                 </div>
               ))}

@@ -22626,7 +22626,123 @@ const __iconNode = [
   ]
 ];
 const Phone = createLucideIcon("phone", __iconNode);
-function useTypingEffect({ text, speed = 80, startDelay = 0 }) {
+class KeyboardSound {
+  constructor() {
+    __publicField(this, "enabled", true);
+    __publicField(this, "audioContext", null);
+    if (typeof window !== "undefined") {
+      try {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {
+        console.warn("Web Audio API not supported");
+      }
+    }
+  }
+  // Generate realistic mechanical keyboard click sound
+  generateClickSound() {
+    if (!this.audioContext) return;
+    const now2 = this.audioContext.currentTime;
+    const oscillator1 = this.audioContext.createOscillator();
+    const oscillator2 = this.audioContext.createOscillator();
+    const gainNode = this.audioContext.createGain();
+    const filter = this.audioContext.createBiquadFilter();
+    oscillator1.connect(filter);
+    oscillator2.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(this.audioContext.destination);
+    oscillator1.type = "square";
+    oscillator1.frequency.setValueAtTime(1200, now2);
+    oscillator1.frequency.exponentialRampToValueAtTime(200, now2 + 0.02);
+    oscillator2.type = "sine";
+    oscillator2.frequency.setValueAtTime(2400, now2);
+    oscillator2.frequency.exponentialRampToValueAtTime(400, now2 + 0.015);
+    filter.type = "highpass";
+    filter.frequency.setValueAtTime(300, now2);
+    gainNode.gain.setValueAtTime(0.2, now2);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, now2 + 0.04);
+    oscillator1.start(now2);
+    oscillator1.stop(now2 + 0.04);
+    oscillator2.start(now2);
+    oscillator2.stop(now2 + 0.04);
+  }
+  // Play mechanical keyboard sound (Blue switch style)
+  playKeyPress() {
+    if (!this.enabled) return;
+    try {
+      this.generateClickSound();
+    } catch (error) {
+    }
+  }
+  // Play spacebar sound (slightly deeper)
+  playSpacebarPress() {
+    if (!this.enabled || !this.audioContext) return;
+    try {
+      const now2 = this.audioContext.currentTime;
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
+      oscillator.type = "square";
+      oscillator.frequency.setValueAtTime(600, now2);
+      oscillator.frequency.exponentialRampToValueAtTime(150, now2 + 0.03);
+      gainNode.gain.setValueAtTime(0.25, now2);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, now2 + 0.05);
+      oscillator.start(now2);
+      oscillator.stop(now2 + 0.05);
+    } catch (error) {
+    }
+  }
+  // Play enter key sound (more pronounced)
+  playEnterPress() {
+    if (!this.enabled || !this.audioContext) return;
+    try {
+      const now2 = this.audioContext.currentTime;
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
+      oscillator.type = "square";
+      oscillator.frequency.setValueAtTime(1500, now2);
+      oscillator.frequency.exponentialRampToValueAtTime(250, now2 + 0.04);
+      gainNode.gain.setValueAtTime(0.3, now2);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, now2 + 0.06);
+      oscillator.start(now2);
+      oscillator.stop(now2 + 0.06);
+    } catch (error) {
+    }
+  }
+  // Play typing sound for multiple characters
+  playTyping(text, interval = 50) {
+    let index2 = 0;
+    const typeInterval = setInterval(() => {
+      if (index2 < text.length) {
+        const char = text[index2];
+        if (char === " ") {
+          this.playSpacebarPress();
+        } else if (char === "\n") {
+          this.playEnterPress();
+        } else {
+          this.playKeyPress();
+        }
+        index2++;
+      } else {
+        clearInterval(typeInterval);
+      }
+    }, interval);
+  }
+  toggle() {
+    this.enabled = !this.enabled;
+    return this.enabled;
+  }
+  setEnabled(enabled) {
+    this.enabled = enabled;
+  }
+  isEnabled() {
+    return this.enabled;
+  }
+}
+const keyboardSound = new KeyboardSound();
+function useTypingEffect({ text, speed = 80, startDelay = 0, enableSound = true }) {
   const [displayedText, setDisplayedText] = reactExports.useState("");
   const [isComplete, setIsComplete] = reactExports.useState(false);
   reactExports.useEffect(() => {
@@ -22634,7 +22750,17 @@ function useTypingEffect({ text, speed = 80, startDelay = 0 }) {
     let currentIndex = 0;
     const startTyping = () => {
       if (currentIndex < text.length) {
+        const char = text[currentIndex];
         setDisplayedText(text.slice(0, currentIndex + 1));
+        if (enableSound && keyboardSound.isEnabled()) {
+          if (char === " ") {
+            keyboardSound.playSpacebarPress();
+          } else if (char === "\n") {
+            keyboardSound.playEnterPress();
+          } else {
+            keyboardSound.playKeyPress();
+          }
+        }
         currentIndex++;
         timeout = setTimeout(startTyping, speed);
       } else {
@@ -22645,89 +22771,172 @@ function useTypingEffect({ text, speed = 80, startDelay = 0 }) {
     return () => {
       clearTimeout(timeout);
     };
-  }, [text, speed, startDelay]);
+  }, [text, speed, startDelay, enableSound]);
   return { displayedText, isComplete };
 }
 function Hero() {
+  const [soundEnabled, setSoundEnabled] = reactExports.useState(true);
   const name = useTypingEffect({ text: "SUBODH RAM", speed: 100, startDelay: 500 });
   const title = useTypingEffect({ text: "Master of Computer Applications Student", speed: 50, startDelay: 2e3 });
-  const tagline = useTypingEffect({ text: "Networking & IT Infrastructure Enthusiast", speed: 50, startDelay: 4500 });
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative z-10 w-full max-w-5xl mx-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-window", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-header", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-buttons", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "terminal-button" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "terminal-button" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "terminal-button" })
+  const tagline = useTypingEffect({ text: "Full Stack Developer & Network Engineer", speed: 50, startDelay: 4500 });
+  reactExports.useEffect(() => {
+    keyboardSound.setEnabled(soundEnabled);
+  }, [soundEnabled]);
+  reactExports.useEffect(() => {
+    const handleKeyPress = () => {
+      if (soundEnabled) {
+        keyboardSound.playKeyPress();
+      }
+    };
+    document.addEventListener("keydown", handleKeyPress);
+    return () => document.removeEventListener("keydown", handleKeyPress);
+  }, [soundEnabled]);
+  const handleSoundToggle = () => {
+    const newState = !soundEnabled;
+    setSoundEnabled(newState);
+    keyboardSound.setEnabled(newState);
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "relative min-h-screen flex items-center justify-center px-3 sm:px-6 lg:px-8 py-8", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        onClick: handleSoundToggle,
+        className: "fixed top-2 right-2 sm:top-4 sm:right-4 z-50 bg-terminal-green/10 border border-terminal-green/30 text-terminal-green hover:bg-terminal-green/20 px-2 py-1 sm:px-4 sm:py-2 rounded font-mono text-[10px] sm:text-xs transition-all",
+        title: soundEnabled ? "Disable keyboard sound" : "Enable keyboard sound",
+        children: [
+          "🔊 ",
+          soundEnabled ? "ON" : "OFF"
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative z-10 w-full max-w-5xl mx-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-window", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-header", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-buttons", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "terminal-button" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "terminal-button" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "terminal-button" })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "terminal-title text-[10px] sm:text-sm truncate", children: "root@subodh-ram:~# ./portfolio.sh" })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "terminal-title", children: "C:\\Users\\SubodhRam\\Portfolio" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-body p-8", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "C:\\Users\\SubodhRam>" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white", children: "echo %NAME%" })
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-body p-4 sm:p-6 lg:p-8", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4 sm:mb-6 text-[10px] sm:text-xs font-mono text-terminal-gray overflow-x-auto", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-1 whitespace-nowrap", children: [
+            "[",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "OK" }),
+            "] Starting Portfolio System..."
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-1 whitespace-nowrap", children: [
+            "[",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "OK" }),
+            "] Loading user credentials..."
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-2 sm:mb-3 whitespace-nowrap", children: [
+            "[",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "OK" }),
+            "] System ready. Access granted."
+          ] })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-4xl sm:text-5xl md:text-6xl font-bold mb-4 font-mono", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-terminal-green", children: [
-          name.displayedText,
-          !name.isComplete && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "cursor-blink", children: "_" })
-        ] }) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "C:\\Users\\SubodhRam>" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white", children: "type education.txt" })
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 sm:mb-8", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-2 text-[10px] sm:text-xs overflow-x-auto", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green whitespace-nowrap", children: "root@subodh-ram:~#" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white whitespace-nowrap", children: "whoami" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-mono break-words", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-terminal-green", children: [
+            name.displayedText,
+            !name.isComplete && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "cursor-blink", children: "█" })
+          ] }) })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "text-lg sm:text-xl font-mono text-terminal-white", children: [
-          title.displayedText,
-          !title.isComplete && name.isComplete && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "cursor-blink", children: "_" })
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4 sm:mb-6", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-2 text-[10px] sm:text-xs overflow-x-auto", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green whitespace-nowrap", children: "root@subodh-ram:~#" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white whitespace-nowrap", children: "cat /etc/education.conf" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "text-sm sm:text-lg md:text-xl font-mono text-terminal-white break-words", children: [
+            title.displayedText,
+            !title.isComplete && name.isComplete && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "cursor-blink", children: "█" })
+          ] }),
+          title.isComplete && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-xs sm:text-md text-terminal-gray font-mono mt-1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-yellow", children: "Duration:" }),
+            " 2024–2026"
+          ] })
         ] }),
-        title.isComplete && /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-md text-terminal-gray font-mono mt-1", children: "2024–2026" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "C:\\Users\\SubodhRam>" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white", children: "type specialization.txt" })
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 sm:mb-8", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-2 text-[10px] sm:text-xs overflow-x-auto", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green whitespace-nowrap", children: "root@subodh-ram:~#" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white whitespace-nowrap", children: "cat /proc/specialization" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm sm:text-lg md:text-xl font-mono text-terminal-yellow break-words", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: ">>" }),
+            " ",
+            tagline.displayedText,
+            !tagline.isComplete && title.isComplete && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "cursor-blink", children: "█" })
+          ] })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-lg sm:text-xl font-mono text-terminal-yellow", children: [
-          tagline.displayedText,
-          !tagline.isComplete && title.isComplete && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "cursor-blink", children: "_" })
-        ] })
-      ] }),
-      tagline.isComplete && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-8 animate-fade-in", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "C:\\Users\\SubodhRam>" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white", children: "download resume.pdf" })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Button,
-          {
-            size: "lg",
-            className: "bg-transparent border-2 border-terminal-green text-terminal-green hover:bg-terminal-green/10 font-mono px-6 py-3 text-base transition-all duration-300 group",
-            asChild: true,
-            children: /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: "/assets/resume.pdf", download: true, className: "flex items-center gap-2", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { className: "h-5 w-5" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "resume.pdf" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "opacity-0 group-hover:opacity-100 cursor-blink transition-opacity", children: "_" })
+        tagline.isComplete && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 sm:mt-8 animate-fade-in", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-3 text-[10px] sm:text-xs overflow-x-auto", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green whitespace-nowrap", children: "root@subodh-ram:~#" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white whitespace-nowrap", children: "wget https://subodh-ram.dev/resume.pdf" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row gap-2 sm:gap-3", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Button,
+              {
+                size: "lg",
+                className: "bg-transparent border-2 border-terminal-green text-terminal-green hover:bg-terminal-green/20 hover:shadow-[0_0_20px_rgba(0,255,0,0.3)] font-mono px-3 py-2 sm:px-6 sm:py-3 text-xs sm:text-base transition-all duration-300 group w-full sm:w-auto",
+                asChild: true,
+                children: /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: "/assets/resume.pdf", download: "Subodh_Ram_Resume.pdf", className: "flex items-center justify-center gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Download, { className: "h-4 w-4 sm:h-5 sm:w-5 group-hover:animate-bounce flex-shrink-0" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate", children: "DOWNLOAD_RESUME.pdf" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "opacity-0 group-hover:opacity-100 cursor-blink transition-opacity hidden sm:inline", children: "█" })
+                ] })
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Button,
+              {
+                size: "lg",
+                className: "bg-transparent border-2 border-terminal-yellow text-terminal-yellow hover:bg-terminal-yellow/20 hover:shadow-[0_0_20px_rgba(255,255,0,0.3)] font-mono px-3 py-2 sm:px-6 sm:py-3 text-xs sm:text-base transition-all duration-300 group w-full sm:w-auto",
+                asChild: true,
+                children: /* @__PURE__ */ jsxRuntimeExports.jsxs("a", { href: "/assets/resume.html", target: "_blank", rel: "noopener noreferrer", className: "flex items-center justify-center gap-2", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "👁" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate", children: "VIEW_RESUME" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "opacity-0 group-hover:opacity-100 cursor-blink transition-opacity hidden sm:inline", children: "█" })
+                ] })
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-2 text-[10px] sm:text-xs font-mono text-terminal-gray overflow-x-auto", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "whitespace-nowrap", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-terminal-green", children: [
+                "--",
+                (/* @__PURE__ */ new Date()).toISOString().split("T")[0]
+              ] }),
+              " Connecting to server..."
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-1 whitespace-nowrap", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "[OK]" }),
+              " Resume ready for download"
             ] })
-          }
-        )
+          ] })
+        ] })
       ] })
-    ] })
-  ] }) }) });
+    ] }) })
+  ] });
 }
 function PersonalInfo() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "personal-info", className: "py-20 px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono", children: "C:\\Users\\SubodhRam>" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono", children: 'systeminfo | findstr /C:"Personal"' })
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "personal-info", className: "py-12 sm:py-20 px-3 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 sm:mb-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono whitespace-nowrap", children: "root@subodh-ram:~#" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono whitespace-nowrap", children: 'cat /proc/userinfo | grep "DOB"' })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-6" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-4 sm:mb-6" })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "terminal-box p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 font-mono", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Calendar, { className: "h-5 w-5 text-terminal-green" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-yellow", children: "Date of Birth:" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white", children: "28/04/2003" })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "terminal-box p-3 sm:p-6 hover:border-terminal-yellow/50 transition-all duration-300", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 font-mono", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Calendar, { className: "h-4 w-4 sm:h-5 sm:w-5 text-terminal-green flex-shrink-0" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-yellow text-xs sm:text-base", children: "Date_of_Birth:" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white text-xs sm:text-base", children: "28/04/2003" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-gray text-[10px] sm:text-xs sm:ml-auto", children: "[VERIFIED]" })
     ] }) })
   ] }) });
 }
@@ -22758,47 +22967,52 @@ const educationData = [
   }
 ];
 function Education() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "education", className: "py-20 px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono", children: "C:\\Users\\SubodhRam>" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono", children: "dir Education" })
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "education", className: "py-12 sm:py-20 px-3 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 sm:mb-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono whitespace-nowrap", children: "root@subodh-ram:~#" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono whitespace-nowrap", children: "ls -lah ~/Education/" })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-6" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-4 sm:mb-6" })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-box p-6 mb-6", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono text-terminal-white text-sm mb-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-2", children: "Volume in drive C is PORTFOLIO" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-4", children: "Directory of C:\\Users\\SubodhRam\\Education" })
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-box p-3 sm:p-6 mb-4 sm:mb-6", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono text-terminal-white text-xs sm:text-sm mb-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-2 text-terminal-yellow", children: [
+          "total ",
+          educationData.length,
+          " items"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-4 text-terminal-gray text-[10px] sm:text-xs overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "whitespace-nowrap", children: "drwxr-xr-x 2 subodh-ram subodh-ram 4096 Feb 22 2026 ." }) })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: educationData.map((edu, index2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4", children: educationData.map((edu, index2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
         "div",
         {
-          className: "terminal-box p-4 hover:border-terminal-yellow/50 transition-all duration-300",
+          className: "terminal-box p-3 sm:p-4 hover:border-terminal-yellow/50 hover:shadow-[0_0_15px_rgba(0,255,0,0.1)] transition-all duration-300 group",
           children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green text-sm mb-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green text-xs sm:text-sm mb-2 group-hover:text-terminal-yellow transition-colors break-words", children: [
               "┌─ ",
               edu.institution
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-white text-sm mb-1 pl-3", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-white text-xs sm:text-sm mb-1 pl-3 break-words", children: [
               "│ ",
               edu.degree
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-gray text-xs pl-3 mb-1", children: [
-              "│ ",
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-gray text-[10px] sm:text-xs pl-3 mb-1", children: [
+              "│ 📅 ",
               edu.period
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-yellow text-sm pl-3", children: [
-              "└─ ",
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-yellow text-xs sm:text-sm pl-3", children: [
+              "└─ 🎯 ",
               edu.grade
             ] })
           ] })
         },
         index2
       )) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono text-terminal-gray text-sm mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono text-terminal-gray text-xs sm:text-sm mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "[OK]" }),
         educationData.length,
-        " File(s)"
+        " File(s) loaded successfully"
       ] }) })
     ] })
   ] }) });
@@ -22831,88 +23045,170 @@ function Badge({
 const projects = [
   {
     title: "Smart Parking System",
+    name: "Smart_Parking_System",
     year: "2025",
     pid: "PID_1024",
-    technologies: ["Java", "Spring Boot", "JSP", "Oracle DB", "Firebase"],
+    status: "Production",
+    uptime: "99.9%",
+    technologies: ["Java", "Spring Boot", "JSP", "Oracle DB", "Firebase", "REST API"],
     features: [
-      "Real-time parking discovery and availability",
-      "Dynamic pricing and booking system",
-      "OpenStreetMap integration for navigation",
-      "QR-based secure access control"
-    ]
+      "Real-time parking discovery and availability tracking",
+      "Dynamic pricing engine with demand-based algorithms",
+      "OpenStreetMap integration for GPS navigation",
+      "QR-based secure access control and payment gateway",
+      "Admin dashboard with analytics and reporting",
+      "Mobile-responsive design with PWA support"
+    ],
+    metrics: {
+      users: "5000+",
+      response: "<200ms",
+      availability: "99.9%"
+    }
   },
   {
-    title: "Property Price Prediction System",
+    title: "Property Price Prediction",
+    name: "Property_Price_Prediction",
     year: "2025",
     pid: "PID_2048",
-    technologies: ["React", "Node.js", "Python", "MongoDB"],
+    status: "Production",
+    uptime: "99.7%",
+    technologies: ["React", "Node.js", "Python", "MongoDB", "TensorFlow", "ML"],
     features: [
-      "AI-based property price prediction",
-      "Interactive dashboards and analytics",
-      "Real-time market trend analysis",
-      "Comprehensive data visualization"
-    ]
+      "AI-based property price prediction using ML models",
+      "Interactive dashboards with real-time analytics",
+      "Market trend analysis with historical data",
+      "Comprehensive data visualization with charts",
+      "RESTful API for third-party integrations",
+      "Automated data scraping and processing pipeline"
+    ],
+    metrics: {
+      accuracy: "94%",
+      predictions: "10K+",
+      datasets: "50K+"
+    }
   },
   {
     title: "SmartTech Connect",
+    name: "SmartTech_Connect",
     year: "2025",
     pid: "PID_4096",
-    technologies: ["React", "Node.js", "MongoDB", "Firebase"],
+    status: "Production",
+    uptime: "99.8%",
+    technologies: ["React", "Node.js", "MongoDB", "Firebase", "Socket.io", "WebRTC"],
     features: [
-      "Technician booking and scheduling",
-      "Real-time chat functionality",
-      "Community forum and support",
-      "AI-powered recommendations"
-    ]
+      "Technician booking and scheduling system",
+      "Real-time chat with WebSocket support",
+      "Community forum with threaded discussions",
+      "AI-powered service recommendations",
+      "Rating and review system with sentiment analysis",
+      "Push notifications and email alerts"
+    ],
+    metrics: {
+      technicians: "500+",
+      bookings: "2K+",
+      satisfaction: "4.8/5"
+    }
+  },
+  {
+    title: "Network Monitor Dashboard",
+    name: "Network_Monitor_Dashboard",
+    year: "2024",
+    pid: "PID_8192",
+    status: "Active",
+    uptime: "99.5%",
+    technologies: ["Python", "Flask", "React", "InfluxDB", "Grafana", "SNMP"],
+    features: [
+      "Real-time network traffic monitoring",
+      "Bandwidth usage analytics and alerts",
+      "Device discovery and topology mapping",
+      "Performance metrics with historical trends",
+      "Automated incident detection and reporting",
+      "Multi-protocol support (SNMP, NetFlow, sFlow)"
+    ],
+    metrics: {
+      devices: "100+",
+      uptime: "99.5%",
+      alerts: "24/7"
+    }
   }
 ];
 function Projects() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "projects", className: "py-20 px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono", children: "C:\\Users\\SubodhRam>" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono", children: 'tasklist /FI "STATUS eq RUNNING"' })
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "projects", className: "py-12 sm:py-20 px-3 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 sm:mb-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono whitespace-nowrap", children: "root@subodh-ram:~#" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono whitespace-nowrap", children: 'ps aux | grep "project" | grep -v grep' })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-6" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-4 sm:mb-6" })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-box p-6 mb-6", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono text-terminal-white text-xs mb-4 overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-[120px_200px_80px_1fr] gap-4 pb-2 border-b border-terminal-green/30", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-box p-3 sm:p-6 mb-4 sm:mb-6", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono text-terminal-white text-[10px] sm:text-xs mb-4 overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden sm:grid grid-cols-[200px_80px_100px_80px_80px] gap-4 pb-2 border-b border-terminal-green/30", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow", children: "Image Name" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow", children: "PID" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow", children: "Status" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow", children: "Mem Usage" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow", children: "Uptime" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow", children: "Year" })
       ] }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-6", children: projects.map((project, index2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4 sm:space-y-6", children: projects.map((project, index2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
         "div",
         {
-          className: "terminal-box p-4 hover:border-terminal-yellow/50 transition-all duration-300",
+          className: "terminal-box p-3 sm:p-4 hover:border-terminal-yellow/50 transition-all duration-300 group",
           children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-[120px_200px_80px_1fr] gap-2 sm:gap-4 mb-4 text-xs", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green", children: [
-                project.title.replace(/\s+/g, "_"),
-                ".exe"
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "block sm:hidden mb-3 space-y-2 text-[10px]", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green group-hover:text-terminal-yellow transition-colors break-words", children: [
+                project.name,
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-gray", children: ".exe" })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap gap-2 text-[10px]", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white", children: project.pid }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-terminal-green flex items-center gap-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "animate-pulse", children: "●" }),
+                  " ",
+                  project.status
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-yellow", children: project.uptime }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-gray", children: project.year })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden sm:grid grid-cols-[200px_80px_100px_80px_80px] gap-4 mb-4 text-xs", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green group-hover:text-terminal-yellow transition-colors break-words", children: [
+                project.name,
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-gray", children: ".exe" })
               ] }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-white", children: project.pid }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-green", children: "Running" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green flex items-center gap-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "animate-pulse", children: "●" }),
+                " ",
+                project.status
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow", children: project.uptime }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray", children: project.year })
             ] }),
+            project.metrics && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-3 flex flex-wrap gap-2 text-[10px] sm:text-xs", children: Object.entries(project.metrics).map(([key, value], i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-terminal-green/10 border border-terminal-green/30 px-2 py-1 sm:px-3 rounded", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-terminal-yellow", children: [
+                key,
+                ":"
+              ] }),
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white", children: value })
+            ] }, i)) }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-3", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow text-xs mb-2", children: "Tech Stack:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-2", children: project.technologies.map((tech, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow text-[10px] sm:text-xs mb-2", children: "Tech Stack:" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-1 sm:gap-2", children: project.technologies.map((tech, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
                 Badge,
                 {
                   variant: "secondary",
-                  className: "font-mono text-xs bg-transparent border border-terminal-green/30 text-terminal-white hover:border-terminal-green/60",
+                  className: "font-mono text-[10px] sm:text-xs bg-transparent border border-terminal-green/30 text-terminal-white hover:border-terminal-green hover:bg-terminal-green/10 transition-all",
                   children: tech
                 },
                 i
               )) })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow text-xs mb-2", children: "Features:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-1", children: project.features.map((feature, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-white text-xs flex items-start gap-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "*" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: feature })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow text-[10px] sm:text-xs mb-2", children: "Features:" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-1", children: project.features.map((feature, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-white text-[10px] sm:text-xs flex items-start gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green flex-shrink-0", children: "•" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "break-words", children: feature })
               ] }, i)) })
             ] })
           ] })
@@ -22927,60 +23223,125 @@ const experiences = [
     company: "Aivariant",
     role: "Data Analyst Intern",
     period: "Aug 2023 – Jan 2024",
+    duration: "6 months",
     location: "Remote",
+    type: "Internship",
     responsibilities: [
-      "Analyzed large datasets to identify trends and patterns",
-      "Created interactive dashboards using Power BI and Tableau",
-      "Collaborated with cross-functional teams to deliver insights",
-      "Automated data processing workflows using Python"
+      "Analyzed large datasets (100K+ records) to identify trends and patterns",
+      "Created 15+ interactive dashboards using Power BI and Tableau",
+      "Collaborated with cross-functional teams to deliver actionable insights",
+      "Automated data processing workflows using Python, reducing processing time by 40%",
+      "Conducted A/B testing and statistical analysis for business decisions",
+      "Presented findings to stakeholders through comprehensive reports"
+    ],
+    achievements: [
+      "Improved data processing efficiency by 40%",
+      "Delivered 15+ analytical dashboards",
+      "Recognized for outstanding performance"
     ]
   },
   {
     company: "Freelance",
     role: "IT Support Specialist",
     period: "2022 – Present",
+    duration: "2+ years",
     location: "Remote",
+    type: "Freelance",
     responsibilities: [
-      "Provided technical support for network configuration",
-      "Troubleshot hardware and software issues",
-      "Implemented security measures and access controls",
-      "Maintained system documentation and user guides"
+      "Provided technical support for network configuration and troubleshooting",
+      "Configured and maintained routers, switches, and firewalls",
+      "Implemented security measures including VPN, SSL/TLS, and access controls",
+      "Performed system diagnostics and resolved hardware/software issues",
+      "Maintained comprehensive system documentation and user guides",
+      "Conducted network performance monitoring and optimization"
+    ],
+    achievements: [
+      "50+ successful network deployments",
+      "99.5% client satisfaction rate",
+      "Zero security breaches"
+    ]
+  },
+  {
+    company: "Academic Projects",
+    role: "Full Stack Developer",
+    period: "2023 – Present",
+    duration: "1+ year",
+    location: "NMIMS University",
+    type: "Academic",
+    responsibilities: [
+      "Developed 4+ full-stack applications using MERN stack",
+      "Implemented RESTful APIs and microservices architecture",
+      "Integrated third-party services (Firebase, Payment Gateways)",
+      "Conducted code reviews and maintained version control with Git",
+      "Optimized application performance and database queries",
+      "Deployed applications on cloud platforms"
+    ],
+    achievements: [
+      "4+ production-ready applications",
+      "10K+ lines of code written",
+      "Best project award recipient"
     ]
   }
 ];
 function Experience() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "experience", className: "py-20 px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono", children: "C:\\Users\\SubodhRam>" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono", children: "netstat -ano | findstr ESTABLISHED" })
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "experience", className: "py-12 sm:py-20 px-3 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 sm:mb-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono whitespace-nowrap", children: "root@subodh-ram:~#" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono whitespace-nowrap", children: "netstat -tupln | grep ESTABLISHED" })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-6" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-4 sm:mb-6" })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-box p-6", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono text-terminal-white text-xs mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-2 text-terminal-yellow", children: "Active Connections" }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-6", children: experiences.map((exp, index2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-box p-3 sm:p-6", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono text-terminal-white text-[10px] sm:text-xs mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-2 text-terminal-yellow flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "[ACTIVE]" }),
+        " Professional Connections"
+      ] }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4 sm:space-y-6", children: experiences.map((exp, index2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
         "div",
         {
-          className: "terminal-box p-4 hover:border-terminal-yellow/50 transition-all duration-300",
+          className: "terminal-box p-3 sm:p-4 hover:border-terminal-yellow/50 hover:shadow-[0_0_15px_rgba(0,255,0,0.1)] transition-all duration-300",
           children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-3", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green text-sm font-bold mb-1", children: [
-                exp.company,
-                " - ",
-                exp.role
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green text-xs sm:text-sm font-bold mb-1 flex items-start gap-2 break-words", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-yellow flex-shrink-0", children: "►" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                  exp.company,
+                  " - ",
+                  exp.role
+                ] })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-gray text-xs flex flex-wrap gap-3", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: exp.period }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "│" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: exp.location })
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-gray text-[10px] sm:text-xs flex flex-wrap gap-2 sm:gap-3", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "whitespace-nowrap", children: [
+                  "⏱ ",
+                  exp.period
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hidden sm:inline", children: "│" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "whitespace-nowrap", children: [
+                  "⌛ ",
+                  exp.duration
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hidden sm:inline", children: "│" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "whitespace-nowrap", children: [
+                  "📍 ",
+                  exp.location
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hidden sm:inline", children: "│" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-yellow whitespace-nowrap", children: exp.type })
               ] })
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-l-2 border-terminal-green/30 pl-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow text-xs mb-2", children: "Responsibilities:" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-1", children: exp.responsibilities.map((resp, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-white text-xs flex items-start gap-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "-" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: resp })
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-l-2 border-terminal-green/30 pl-3 sm:pl-4 hover:border-terminal-yellow/50 transition-colors mb-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow text-[10px] sm:text-xs mb-2", children: "[RESPONSIBILITIES]" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-1", children: exp.responsibilities.map((resp, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-white text-[10px] sm:text-xs flex items-start gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green flex-shrink-0", children: "✓" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "break-words", children: resp })
+              ] }, i)) })
+            ] }),
+            exp.achievements && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-l-2 border-terminal-yellow/30 pl-3 sm:pl-4", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow text-[10px] sm:text-xs mb-2", children: "[KEY ACHIEVEMENTS]" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-2", children: exp.achievements.map((achievement, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-terminal-yellow/10 border border-terminal-yellow/30 px-2 py-1 rounded text-[10px] sm:text-xs text-terminal-white break-words", children: [
+                "🏆 ",
+                achievement
               ] }, i)) })
             ] })
           ] })
@@ -22991,55 +23352,96 @@ function Experience() {
   ] }) });
 }
 function Certifications() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "certifications", className: "py-20 px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono", children: "C:\\Users\\SubodhRam>" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono", children: "dir Certifications /B" })
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "certifications", className: "py-12 sm:py-20 px-3 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 sm:mb-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono whitespace-nowrap", children: "root@subodh-ram:~#" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono whitespace-nowrap", children: "cat /etc/certifications.d/*.cert" })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-6" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-4 sm:mb-6" })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "terminal-box p-6 max-w-3xl mx-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow text-sm mb-4", children: "┌─────────────────────────────────────────────┐" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pl-4 mb-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-green text-base font-bold mb-2", children: "Data Analytics Certification" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-white text-sm mb-1", children: "Issuer: ExcelR" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray text-xs", children: "Period: Aug 2023 – Jan 2024" })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "terminal-box p-3 sm:p-6 max-w-3xl mx-auto hover:border-terminal-yellow/50 hover:shadow-[0_0_20px_rgba(0,255,0,0.15)] transition-all duration-300", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-yellow text-xs sm:text-sm mb-4 flex items-start gap-2 overflow-x-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green whitespace-nowrap", children: "[VERIFIED]" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "whitespace-nowrap", children: "┌─────────────────────────────────────────────┐" })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow text-sm", children: "└─────────────────────────────────────────────┘" })
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "pl-3 sm:pl-4 mb-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-green text-sm sm:text-base font-bold mb-2 flex items-center gap-2 break-words", children: "🎓 Data Analytics Certification" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-white text-xs sm:text-sm mb-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-yellow", children: "Issuer:" }),
+          " ExcelR"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-gray text-[10px] sm:text-xs", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-yellow", children: "Period:" }),
+          " Aug 2023 – Jan 2024"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green text-[10px] sm:text-xs mt-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-yellow", children: "Status:" }),
+          " ✓ ACTIVE"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-yellow text-xs sm:text-sm flex items-start gap-2 overflow-x-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green whitespace-nowrap", children: "[VERIFIED]" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "whitespace-nowrap", children: "└─────────────────────────────────────────────┘" })
+      ] })
     ] }) })
   ] }) });
 }
 const technicalSkills = [
   {
     category: "Programming",
-    command: "python --version && java -version",
-    skills: ["Java", "Python", "JavaScript"]
+    command: 'ls -la /usr/bin/ | grep -E "python|java"',
+    skills: ["Java", "Python", "JavaScript", "TypeScript", "C++"]
+  },
+  {
+    category: "Web Development",
+    command: "npm list -g --depth=0",
+    skills: ["React", "Node.js", "Express.js", "Next.js", "Vite", "Tailwind CSS"]
   },
   {
     category: "Databases",
-    command: "mysql --version",
-    skills: ["MongoDB", "MySQL", "Firebase"]
+    command: "systemctl status mongodb mysql postgresql",
+    skills: ["MongoDB", "MySQL", "PostgreSQL", "Firebase", "Redis"]
   },
   {
-    category: "Data Tools",
-    command: 'systeminfo | findstr /C:"Analytics"',
-    skills: ["Power BI", "Tableau", "Excel", "Data Visualization"]
+    category: "Data Analytics",
+    command: "dpkg -l | grep analytics",
+    skills: ["Power BI", "Tableau", "Excel", "Data Visualization", "Statistical Analysis"]
   },
   {
-    category: "Networking",
-    command: "ipconfig /all",
-    skills: ["TCP/IP", "Subnetting", "Routing & Switching", "DHCP", "DNS", "NAT", "Firewall Configuration"]
+    category: "Networking Protocols",
+    command: "cat /etc/protocols",
+    skills: ["TCP/IP", "UDP", "HTTP/HTTPS", "DNS", "DHCP", "FTP", "SSH", "SMTP", "SNMP"]
   },
   {
-    category: "Tools",
-    command: "netstat -ano",
-    skills: ["Nmap", "Wireshark"]
+    category: "Network Configuration",
+    command: "ifconfig -a && netstat -rn",
+    skills: ["Subnetting", "VLAN Configuration", "Routing & Switching", "NAT", "Port Forwarding"]
   },
   {
-    category: "IT",
-    command: "net user",
-    skills: ["System Security", "User Access Management"]
+    category: "Network Security",
+    command: "iptables -L -n -v",
+    skills: ["Firewall Configuration", "VPN Setup", "SSL/TLS", "Network Segmentation", "IDS/IPS"]
+  },
+  {
+    category: "Network Tools",
+    command: "nmap --version && wireshark --version",
+    skills: ["Nmap", "Wireshark", "Netcat", "tcpdump", "Traceroute", "Ping", "Netstat"]
+  },
+  {
+    category: "IT Infrastructure",
+    command: "systemctl list-units --type=service",
+    skills: ["System Administration", "Server Management", "Backup & Recovery", "Virtualization"]
+  },
+  {
+    category: "Security & Access",
+    command: "cat /etc/passwd | grep user",
+    skills: ["User Access Management", "Active Directory", "Authentication", "Authorization", "Encryption"]
+  },
+  {
+    category: "Cloud & DevOps",
+    command: "docker ps && kubectl get pods",
+    skills: ["Docker", "Git", "CI/CD", "Linux Administration", "Shell Scripting"]
   }
 ];
 const softSkills = [
@@ -23049,31 +23451,35 @@ const softSkills = [
   "Time Management"
 ];
 function Skills() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "skills", className: "py-20 px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono", children: "C:\\Users\\SubodhRam>" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono", children: "ipconfig /all" })
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "skills", className: "py-12 sm:py-20 px-3 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 sm:mb-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono whitespace-nowrap", children: "root@subodh-ram:~#" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono whitespace-nowrap", children: "cat /etc/skills.conf" })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-6" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-4 sm:mb-6" })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-12", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-box p-6", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono text-terminal-yellow text-sm mb-6", children: "Windows IP Configuration" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-6", children: technicalSkills.map((category, index2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-l-2 border-terminal-green/30 pl-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono mb-3", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-gray text-xs mb-1", children: [
-            "> ",
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-8 sm:mb-12", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-box p-3 sm:p-6", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono text-terminal-yellow text-[10px] sm:text-sm mb-4 sm:mb-6 flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "[SYSTEM]" }),
+        " Technical Skills Configuration"
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-4 sm:space-y-6", children: technicalSkills.map((category, index2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-l-2 border-terminal-green/30 pl-3 sm:pl-4 hover:border-terminal-yellow/50 transition-colors", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono mb-2 sm:mb-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray text-[10px] sm:text-xs mb-1 overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "whitespace-nowrap", children: [
+            "$ ",
             category.command
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green text-sm font-bold mb-2", children: [
-            category.category,
-            ":"
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green text-xs sm:text-sm font-bold mb-2", children: [
+            "[",
+            category.category.toUpperCase(),
+            "]"
           ] })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-2", children: category.skills.map((skill, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-1 sm:gap-2", children: category.skills.map((skill, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(
           "span",
           {
-            className: "font-mono text-xs px-3 py-1 bg-terminal-green/10 text-terminal-white border border-terminal-green/30 hover:border-terminal-green/60 transition-colors",
+            className: "font-mono text-[10px] sm:text-xs px-2 py-1 sm:px-3 bg-terminal-green/10 text-terminal-white border border-terminal-green/30 hover:border-terminal-green hover:bg-terminal-green/20 hover:shadow-[0_0_10px_rgba(0,255,0,0.2)] transition-all cursor-default",
             children: skill
           },
           i
@@ -23081,30 +23487,42 @@ function Skills() {
       ] }, index2)) })
     ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono", children: "C:\\Users\\SubodhRam>" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono", children: "type soft_skills.txt" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono whitespace-nowrap", children: "root@subodh-ram:~#" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono whitespace-nowrap", children: "cat /proc/soft_skills" })
       ] }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "terminal-box p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono", children: softSkills.map((skill, index2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-white text-sm mb-2 flex items-center gap-2", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-yellow", children: ">" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "terminal-box p-3 sm:p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono", children: softSkills.map((skill, index2) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-white text-xs sm:text-sm mb-2 flex items-center gap-2 hover:text-terminal-yellow transition-colors", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green flex-shrink-0", children: "✓" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: skill })
       ] }, index2)) }) })
     ] })
   ] }) });
 }
 function Achievements() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "achievements", className: "py-20 px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono", children: "C:\\Users\\SubodhRam>" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono", children: "type achievements.log" })
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "achievements", className: "py-12 sm:py-20 px-3 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 sm:mb-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono whitespace-nowrap", children: "root@subodh-ram:~#" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono whitespace-nowrap", children: "tail -f /var/log/achievements.log" })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-6" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-4 sm:mb-6" })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "terminal-box p-6 max-w-3xl mx-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow text-xs mb-3", children: "[SUCCESS] Achievement Logged" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-l-2 border-terminal-green/50 pl-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-white text-sm leading-relaxed", children: "Led end-to-end data analysis projects converting raw data into meaningful insights, demonstrating strong analytical capabilities and technical expertise in data-driven decision making." }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray text-xs mt-3", children: "Status: COMPLETED | Priority: HIGH" })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "terminal-box p-3 sm:p-6 max-w-3xl mx-auto hover:border-terminal-yellow/50 hover:shadow-[0_0_20px_rgba(0,255,0,0.15)] transition-all duration-300", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-yellow text-[10px] sm:text-xs mb-3 flex items-center gap-2 break-words", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green animate-pulse flex-shrink-0", children: "●" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+          "[SUCCESS] Achievement Logged - ",
+          (/* @__PURE__ */ new Date()).toISOString().split("T")[0]
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-l-2 border-terminal-green/50 pl-3 sm:pl-4 hover:border-terminal-yellow/50 transition-colors", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-white text-xs sm:text-sm leading-relaxed break-words", children: "Led end-to-end data analysis projects converting raw data into meaningful insights, demonstrating strong analytical capabilities and technical expertise in data-driven decision making." }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-gray text-[10px] sm:text-xs mt-3 flex flex-wrap items-center gap-2 sm:gap-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green whitespace-nowrap", children: "Status: COMPLETED" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hidden sm:inline", children: "│" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-yellow whitespace-nowrap", children: "Priority: HIGH" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hidden sm:inline", children: "│" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green whitespace-nowrap", children: "✓ VERIFIED" })
+      ] })
     ] }) })
   ] }) });
 }
@@ -23272,22 +23690,28 @@ const contactInfo = [
   }
 ];
 function Contact() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "contact", className: "py-20 px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono", children: "C:\\Users\\SubodhRam>" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono", children: "ping contacts -t" })
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { id: "contact", className: "py-12 sm:py-20 px-3 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 sm:mb-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2 mb-4 text-[10px] sm:text-xs overflow-x-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green font-mono whitespace-nowrap", children: "root@subodh-ram:~#" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-white font-mono whitespace-nowrap", children: "nmap -sV localhost --open" })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-6" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px bg-terminal-green/30 mb-4 sm:mb-6" })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-box p-6 mb-6", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono text-terminal-white text-sm mb-6", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow mb-2", children: "Pinging contact endpoints..." }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray text-xs mb-4", children: "Looking for opportunities in Network Engineering, IT Support, and IT Infrastructure roles." })
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-box p-3 sm:p-6 mb-4 sm:mb-6", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono text-terminal-white text-xs sm:text-sm mb-4 sm:mb-6", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-yellow mb-2 flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green animate-pulse", children: "●" }),
+          "Scanning contact endpoints..."
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-gray text-[10px] sm:text-xs mb-4 break-words", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "[INFO]" }),
+          " Looking for opportunities in Network Engineering, IT Support, and IT Infrastructure roles."
+        ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono text-xs mb-4 overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-[100px_150px_1fr_80px] gap-4 pb-2 border-b border-terminal-green/30 min-w-[600px]", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono text-[10px] sm:text-xs mb-4 overflow-x-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden sm:grid grid-cols-[100px_150px_1fr_80px] gap-4 pb-2 border-b border-terminal-green/30", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow", children: "Protocol" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow", children: "Endpoint" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow", children: "Service" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow", children: "Address" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-yellow", children: "Status" })
       ] }) }),
@@ -23299,50 +23723,77 @@ function Contact() {
             href: contact.href,
             target: contact.href.startsWith("http") ? "_blank" : void 0,
             rel: contact.href.startsWith("http") ? "noopener noreferrer" : void 0,
-            className: "block terminal-box p-4 hover:border-terminal-yellow/50 transition-all duration-300 group",
-            children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono text-xs grid grid-cols-1 sm:grid-cols-[100px_150px_1fr_80px] gap-2 sm:gap-4 items-center min-w-[600px] sm:min-w-0", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green flex items-center gap-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { className: "h-4 w-4" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: contact.protocol })
+            className: "block terminal-box p-3 sm:p-4 hover:border-terminal-yellow/50 hover:shadow-[0_0_15px_rgba(0,255,0,0.1)] transition-all duration-300 group",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono text-[10px] sm:text-xs", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "block sm:hidden space-y-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green flex items-center gap-2 group-hover:text-terminal-yellow transition-colors", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { className: "h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: contact.protocol }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-terminal-green flex items-center gap-1 ml-auto", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "animate-pulse", children: "●" }),
+                    " OPEN"
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-white pl-5", children: contact.label }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray break-all group-hover:text-terminal-white transition-colors pl-5", children: contact.value })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-white", children: contact.label }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray break-all", children: contact.value }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-green", children: "ACTIVE" })
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden sm:grid grid-cols-[100px_150px_1fr_80px] gap-4 items-center", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green flex items-center gap-2 group-hover:text-terminal-yellow transition-colors", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Icon2, { className: "h-4 w-4 flex-shrink-0" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: contact.protocol })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-white", children: contact.label }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray break-all group-hover:text-terminal-white transition-colors", children: contact.value }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-green flex items-center gap-1", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "animate-pulse", children: "●" }),
+                  " OPEN"
+                ] })
+              ] })
             ] })
           },
           index2
         );
       }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono text-terminal-gray text-xs mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)" }) })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono text-terminal-gray text-[10px] sm:text-xs mt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 break-words", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green flex-shrink-0", children: "[OK]" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Scan complete: 4 services detected, 4 open ports, 0% packet loss" })
+      ] }) })
     ] })
   ] }) });
 }
-function Footer() {
+function Footer({ onShutdown }) {
   const currentYear = (/* @__PURE__ */ new Date()).getFullYear();
-  const appIdentifier = typeof window !== "undefined" ? encodeURIComponent(window.location.hostname) : "subodh-portfolio";
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("footer", { className: "relative z-10 py-8 px-4 sm:px-6 lg:px-8 border-t border-terminal-green/20", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-6xl mx-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "terminal-box p-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono text-center", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray text-xs mb-2", children: "C:\\Users\\SubodhRam> echo %COPYRIGHT%" }),
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("footer", { className: "relative z-10 py-8 px-4 sm:px-6 lg:px-8 border-t border-terminal-green/20", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-6xl mx-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "terminal-box p-6 hover:border-terminal-yellow/30 transition-all duration-300", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono text-center", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray text-xs mb-2", children: "root@subodh-ram:~# echo $COPYRIGHT" }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm text-terminal-white mb-3", children: [
       "© ",
       currentYear,
       " Subodh Ram. All rights reserved."
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray text-xs mb-2", children: "C:\\Users\\SubodhRam> type credits.txt" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm text-terminal-white flex items-center justify-center gap-2 flex-wrap", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray text-xs mb-2", children: "root@subodh-ram:~# cat /etc/credits" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-sm text-terminal-white flex items-center justify-center gap-2 flex-wrap mb-4", children: [
       "Built with ",
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Heart, { className: "h-4 w-4 text-terminal-green fill-terminal-green" }),
-      " using",
-      " ",
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Heart, { className: "h-4 w-4 text-terminal-green fill-terminal-green animate-pulse" }),
+      " and passion"
+    ] }),
+    onShutdown && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-4 pt-4 border-t border-terminal-green/20", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "a",
+        "button",
         {
-          href: `https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${appIdentifier}`,
-          target: "_blank",
-          rel: "noopener noreferrer",
-          className: "text-terminal-green hover:text-terminal-yellow transition-colors font-medium underline",
-          children: "caffeine.ai"
+          onClick: onShutdown,
+          className: "bg-transparent border-2 border-red-500 text-red-500 hover:bg-red-500/20 hover:shadow-[0_0_20px_rgba(255,0,0,0.3)] font-mono px-6 py-2 text-sm transition-all duration-300 group",
+          children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "⚡" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "sudo shutdown now" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "opacity-0 group-hover:opacity-100 transition-opacity", children: "█" })
+          ] })
         }
-      )
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray text-xs mt-2", children: "Click to shutdown the system" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-gray text-xs mt-3", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "[OK]" }),
+      " System running smoothly"
     ] })
   ] }) }) }) });
 }
@@ -23413,15 +23864,601 @@ function NetworkLines() {
 function ScanlineOverlay() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 pointer-events-none z-50 scanline-overlay" });
 }
+function NetworkStats() {
+  const [stats, setStats] = reactExports.useState([
+    { label: "Uptime", value: "99.9%", status: "success", icon: "⚡" },
+    { label: "Latency", value: "<50ms", status: "success", icon: "📡" },
+    { label: "Bandwidth", value: "1Gbps", status: "active", icon: "🌐" },
+    { label: "Packets", value: "0 lost", status: "success", icon: "📦" }
+  ]);
+  const [currentTime, setCurrentTime] = reactExports.useState(/* @__PURE__ */ new Date());
+  reactExports.useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(/* @__PURE__ */ new Date());
+    }, 1e3);
+    return () => clearInterval(timer);
+  }, []);
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "success":
+        return "text-terminal-green";
+      case "warning":
+        return "text-terminal-yellow";
+      case "active":
+        return "text-terminal-white";
+      default:
+        return "text-terminal-gray";
+    }
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "py-12 px-4 sm:px-6 lg:px-8 border-t border-terminal-green/20", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-6xl mx-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-box p-6", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-6", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-green text-xs mb-1", children: "root@subodh-ram:~# systemctl status portfolio.service" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-terminal-yellow text-sm flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "animate-pulse", children: "●" }),
+          "System Status: OPERATIONAL"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-mono text-terminal-gray text-xs", children: currentTime.toLocaleTimeString() })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-4", children: stats.map((stat, index2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        className: "terminal-box p-4 hover:border-terminal-green/50 transition-all duration-300",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-mono text-center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-2xl mb-2", children: stat.icon }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-terminal-gray text-xs mb-1", children: stat.label }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `text-lg font-bold ${getStatusColor(stat.status)}`, children: stat.value })
+        ] })
+      },
+      index2
+    )) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6 font-mono text-xs text-terminal-gray", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green", children: "[OK]" }),
+      "All systems operational | Last check: ",
+      currentTime.toLocaleString()
+    ] }) })
+  ] }) }) });
+}
+const nothingLogo = `
+███╗   ██╗ ██████╗ ████████╗██╗  ██╗██╗███╗   ██╗ ██████╗ 
+████╗  ██║██╔═══██╗╚══██╔══╝██║  ██║██║████╗  ██║██╔════╝ 
+██╔██╗ ██║██║   ██║   ██║   ███████║██║██╔██╗ ██║██║  ███╗
+██║╚██╗██║██║   ██║   ██║   ██╔══██║██║██║╚██╗██║██║   ██║
+██║ ╚████║╚██████╔╝   ██║   ██║  ██║██║██║ ╚████║╚██████╔╝
+╚═╝  ╚═══╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ 
+`;
+const bootMessages = [
+  { text: "", delay: 100 },
+  { text: "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓", delay: 50, color: "cyan" },
+  { text: "", delay: 100 },
+  { text: nothingLogo, delay: 500, color: "logo", multiline: true },
+  { text: "", delay: 200 },
+  { text: "                    NOTHING OS - Portfolio Edition v2.0", delay: 150, color: "cyan" },
+  { text: "                    Powered by Subodh Ram Technologies", delay: 150, color: "gray" },
+  { text: "", delay: 100 },
+  { text: "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓", delay: 50, color: "cyan" },
+  { text: "", delay: 300 },
+  { text: "[    0.000000] Initializing NOTHING Portfolio System...", delay: 100 },
+  { text: "[    0.000123] CPU: Intel Core i9-13900K @ 5.8GHz (24 cores)", delay: 80, color: "green" },
+  { text: "[    0.000234] Memory: 64GB DDR5-6000 CL30", delay: 80, color: "green" },
+  { text: "[    0.000345] GPU: NVIDIA RTX 4090 24GB", delay: 80, color: "green" },
+  { text: "[    0.000456] Storage: 4TB NVMe Gen5 SSD", delay: 80, color: "green" },
+  { text: "[    0.123456] Loading NOTHING kernel modules...", delay: 120 },
+  { text: "[  OK  ] Loaded kernel module: nothing_core.ko", delay: 100, color: "green" },
+  { text: "[  OK  ] Loaded kernel module: portfolio_engine.ko", delay: 100, color: "green" },
+  { text: "[  OK  ] Loaded kernel module: networking_stack.ko", delay: 100, color: "green" },
+  { text: "[  OK  ] Loaded kernel module: security_framework.ko", delay: 100, color: "green" },
+  { text: "[    0.234567] Starting systemd v256.4-nothing-edition", delay: 100 },
+  { text: "[    0.345678] Mounted /sys/kernel/security", delay: 60 },
+  { text: "[    0.456789] Mounted /sys/fs/cgroup", delay: 60 },
+  { text: "[    0.567890] Mounted /sys/fs/fuse/connections", delay: 60 },
+  { text: "[    0.678901] Mounted /dev/shm (tmpfs)", delay: 60 },
+  { text: "[    0.789012] Starting Journal Service...", delay: 100 },
+  { text: "[  OK  ] Started Journal Service", delay: 100, color: "green" },
+  { text: "[    0.890123] Detecting hardware configuration...", delay: 120, color: "yellow" },
+  { text: "[  OK  ] Detected Network Interface: eth0 (1Gbps)", delay: 100, color: "green" },
+  { text: "[  OK  ] Detected Network Interface: wlan0 (WiFi 6E)", delay: 100, color: "green" },
+  { text: "[    1.001234] Starting Load Kernel Modules...", delay: 100 },
+  { text: "[  OK  ] Finished Load Kernel Modules", delay: 100, color: "green" },
+  { text: "[    1.112345] Starting Apply Kernel Variables...", delay: 100 },
+  { text: "[  OK  ] Finished Apply Kernel Variables", delay: 100, color: "green" },
+  { text: "[    1.223456] Initializing AI/ML Framework...", delay: 150, color: "yellow" },
+  { text: "[  OK  ] TensorFlow 2.15.0 initialized", delay: 100, color: "green" },
+  { text: "[  OK  ] PyTorch 2.1.0 initialized", delay: 100, color: "green" },
+  { text: "[    1.334567] Starting Create System Users...", delay: 100 },
+  { text: "[  OK  ] Created user: subodh-ram (uid=1000)", delay: 100, color: "green" },
+  { text: "[  OK  ] Created group: developers (gid=1000)", delay: 100, color: "green" },
+  { text: "[    1.445678] Starting Create Static Device Nodes...", delay: 100 },
+  { text: "[  OK  ] Finished Create Static Device Nodes", delay: 100, color: "green" },
+  { text: "[    1.556789] Starting Rule-based Manager for Device Events...", delay: 100 },
+  { text: "[  OK  ] Started Rule-based Manager for Device Events", delay: 100, color: "green" },
+  { text: "[    1.667890] Configuring Network Stack...", delay: 150, color: "yellow" },
+  { text: "[  OK  ] Configured TCP/IP Stack", delay: 100, color: "green" },
+  { text: "[  OK  ] Configured DNS Resolution (8.8.8.8, 1.1.1.1)", delay: 100, color: "green" },
+  { text: "[  OK  ] Configured DHCP Client", delay: 100, color: "green" },
+  { text: "[  OK  ] Configured Firewall Rules (iptables)", delay: 100, color: "green" },
+  { text: "[    1.778901] Starting Network Services...", delay: 150 },
+  { text: "[  OK  ] Started Network Configuration", delay: 100, color: "green" },
+  { text: "[  OK  ] Started Network Name Resolution", delay: 100, color: "green" },
+  { text: "[  OK  ] Started SSH Daemon (Port 22)", delay: 100, color: "green" },
+  { text: "[    1.889012] Mounting Portfolio Filesystems...", delay: 150 },
+  { text: "[  OK  ] Mounted /home/subodh-ram/portfolio", delay: 100, color: "green" },
+  { text: "[  OK  ] Mounted /var/www/projects", delay: 100, color: "green" },
+  { text: "[  OK  ] Mounted /opt/development", delay: 100, color: "green" },
+  { text: "[    2.000123] Starting Database Services...", delay: 150, color: "yellow" },
+  { text: "[  OK  ] Started MongoDB v7.0.5 (Port 27017)", delay: 100, color: "green" },
+  { text: "[  OK  ] Started PostgreSQL v16.1 (Port 5432)", delay: 100, color: "green" },
+  { text: "[  OK  ] Started Redis v7.2.4 (Port 6379)", delay: 100, color: "green" },
+  { text: "[    2.111234] Starting Portfolio Services...", delay: 150, color: "yellow" },
+  { text: "[  OK  ] Started Portfolio Frontend Service (React + Vite)", delay: 100, color: "green" },
+  { text: "[  OK  ] Started Portfolio Backend Service (Node.js + Express)", delay: 100, color: "green" },
+  { text: "[  OK  ] Started Portfolio API Gateway (Port 3000)", delay: 100, color: "green" },
+  { text: "[  OK  ] Started WebSocket Server (Port 8080)", delay: 100, color: "green" },
+  { text: "[    2.222345] Starting Security Services...", delay: 150, color: "yellow" },
+  { text: "[  OK  ] Started Firewall Service", delay: 100, color: "green" },
+  { text: "[  OK  ] Started Intrusion Detection System", delay: 100, color: "green" },
+  { text: "[  OK  ] Started SSL/TLS Certificate Manager", delay: 100, color: "green" },
+  { text: "[    2.333456] Starting Development Tools...", delay: 150, color: "yellow" },
+  { text: "[  OK  ] Started Docker Engine v24.0.7", delay: 100, color: "green" },
+  { text: "[  OK  ] Started Git Service v2.43.0", delay: 100, color: "green" },
+  { text: "[  OK  ] Started VS Code Server", delay: 100, color: "green" },
+  { text: "[    2.444567] Starting Display Manager...", delay: 150 },
+  { text: "[  OK  ] Started Display Manager (Wayland)", delay: 100, color: "green" },
+  { text: "[  OK  ] Started Window Manager (Hyprland)", delay: 100, color: "green" },
+  { text: "[    2.555678] Reached target Multi-User System", delay: 150, color: "cyan" },
+  { text: "[    2.666789] Reached target Graphical Interface", delay: 150, color: "cyan" },
+  { text: "", delay: 300 },
+  { text: "╔════════════════════════════════════════════════════════════════════╗", delay: 100, color: "cyan" },
+  { text: "║                    NOTHING OS - SYSTEM READY                      ║", delay: 100, color: "cyan" },
+  { text: "╚════════════════════════════════════════════════════════════════════╝", delay: 100, color: "cyan" },
+  { text: "", delay: 200 },
+  { text: "NOTHING GNU/Linux 6.2 subodh-portfolio tty1", delay: 150, color: "white" },
+  { text: "", delay: 100 },
+  { text: "subodh-portfolio login: subodh-ram", delay: 200, color: "cyan" },
+  { text: "Password: ●●●●●●●●", delay: 300, color: "cyan" },
+  { text: "", delay: 200 },
+  { text: "Last login: " + (/* @__PURE__ */ new Date()).toLocaleString(), delay: 150, color: "gray" },
+  { text: "", delay: 100 },
+  { text: "╔════════════════════════════════════════════════════════════════════╗", delay: 100, color: "green" },
+  { text: "║  Welcome to NOTHING OS - Portfolio Edition                        ║", delay: 100, color: "green" },
+  { text: "║  Developer: Subodh Ram                                            ║", delay: 100, color: "green" },
+  { text: "║  Specialization: Full Stack Development & Network Engineering     ║", delay: 100, color: "green" },
+  { text: "║  Education: Master of Computer Applications (MCA)                 ║", delay: 100, color: "green" },
+  { text: "╚════════════════════════════════════════════════════════════════════╝", delay: 100, color: "green" },
+  { text: "", delay: 200 },
+  { text: "[subodh-ram@nothing-portfolio ~]$ neofetch", delay: 300, color: "yellow" },
+  { text: "", delay: 200 },
+  { text: "       ██████╗                    OS: NOTHING Linux x86_64", delay: 100, color: "cyan" },
+  { text: "      ██╔════╝                    Host: Portfolio System v2.0", delay: 100, color: "cyan" },
+  { text: "      ██║                         Kernel: 6.6.10-nothing", delay: 100, color: "cyan" },
+  { text: "      ██║                         Uptime: 2 mins", delay: 100, color: "cyan" },
+  { text: "      ╚██████╗                    Shell: zsh 5.9", delay: 100, color: "cyan" },
+  { text: "       ╚═════╝                    Terminal: alacritty", delay: 100, color: "cyan" },
+  { text: "                                  CPU: Intel i9-13900K (24) @ 5.8GHz", delay: 100, color: "cyan" },
+  { text: "                                  GPU: NVIDIA RTX 4090", delay: 100, color: "cyan" },
+  { text: "                                  Memory: 2048MiB / 65536MiB", delay: 100, color: "cyan" },
+  { text: "", delay: 200 },
+  { text: "[subodh-ram@nothing-portfolio ~]$ startx", delay: 300, color: "yellow" },
+  { text: "", delay: 200 },
+  { text: "⚡ Starting X Server...", delay: 200, color: "yellow" },
+  { text: "⚡ Loading Wayland compositor...", delay: 200, color: "yellow" },
+  { text: "⚡ Initializing GPU acceleration...", delay: 200, color: "yellow" },
+  { text: "⚡ Loading portfolio interface...", delay: 300, color: "yellow" },
+  { text: "⚡ Applying custom themes...", delay: 200, color: "yellow" },
+  { text: "⚡ Starting animation engine...", delay: 200, color: "yellow" },
+  { text: "", delay: 300 },
+  { text: "✓ Portfolio System Ready!", delay: 500, color: "green" },
+  { text: "", delay: 500 }
+];
+function BootSequence({ onBootComplete }) {
+  const [messages, setMessages] = reactExports.useState([]);
+  const [colors, setColors] = reactExports.useState([]);
+  const [currentIndex, setCurrentIndex] = reactExports.useState(0);
+  const [isComplete, setIsComplete] = reactExports.useState(false);
+  const [showLogo, setShowLogo] = reactExports.useState(false);
+  const scrollRef = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+  reactExports.useEffect(() => {
+    if (currentIndex === 0) {
+      setShowLogo(true);
+    }
+    if (currentIndex >= bootMessages.length) {
+      setIsComplete(true);
+      setTimeout(() => {
+        onBootComplete();
+      }, 1e3);
+      return;
+    }
+    const timer = setTimeout(() => {
+      const message = bootMessages[currentIndex];
+      if (message.multiline) {
+        setCurrentIndex((prev) => prev + 1);
+        return;
+      }
+      setMessages((prev) => [...prev, message.text]);
+      setColors((prev) => [...prev, message.color || "white"]);
+      setCurrentIndex((prev) => prev + 1);
+      if (message.text.trim()) {
+        keyboardSound.playKeyPress();
+      }
+    }, bootMessages[currentIndex].delay);
+    return () => clearTimeout(timer);
+  }, [currentIndex, onBootComplete]);
+  const getColorClass = (color) => {
+    switch (color) {
+      case "green":
+        return "text-green-500";
+      case "yellow":
+        return "text-yellow-500";
+      case "red":
+        return "text-red-500";
+      case "cyan":
+        return "text-cyan-400";
+      case "gray":
+        return "text-gray-500";
+      case "white":
+        return "text-white";
+      default:
+        return "text-gray-300";
+    }
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 bg-black z-50 overflow-hidden flex flex-col", children: [
+    showLogo && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-shrink-0 p-4 border-b border-gray-800", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-cyan-400 text-[10px] leading-none mb-2", children: "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { className: "text-green-400 font-bold text-xs sm:text-sm leading-tight", children: nothingLogo }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-cyan-400 text-[10px] text-center mt-1", children: "NOTHING OS - Portfolio Edition v2.0" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-gray-500 text-[8px] text-center", children: "Powered by Subodh Ram Technologies" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-cyan-400 text-[10px] leading-none mt-2", children: "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        ref: scrollRef,
+        className: "flex-1 overflow-y-auto p-4 font-mono",
+        style: { scrollBehavior: "smooth" },
+        children: [
+          messages.map((message, index2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              className: `mb-0.5 ${getColorClass(colors[index2])} text-[9px] sm:text-[10px] whitespace-pre`,
+              children: message || " "
+            },
+            index2
+          )),
+          !isComplete && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-block w-1.5 h-3 bg-green-500 animate-pulse ml-1" })
+        ]
+      }
+    )
+  ] });
+}
+const shutdownMessages = [
+  { text: "[subodh-ram@portfolio ~]$ sudo shutdown now", delay: 200 },
+  { text: "", delay: 300 },
+  { text: "Broadcast message from root@subodh-portfolio", delay: 150 },
+  { text: "        (/dev/pts/0) at " + (/* @__PURE__ */ new Date()).toLocaleTimeString(), delay: 150 },
+  { text: "", delay: 200 },
+  { text: "The system is going down for poweroff NOW!", delay: 200 },
+  { text: "", delay: 300 },
+  { text: "[    0.000000] Stopping Portfolio Services...", delay: 150 },
+  { text: "[  OK  ] Stopped Portfolio Frontend Service", delay: 100 },
+  { text: "[  OK  ] Stopped Portfolio Backend Service", delay: 100 },
+  { text: "[  OK  ] Stopped Portfolio Database Service", delay: 100 },
+  { text: "[    0.123456] Stopping Display Manager...", delay: 150 },
+  { text: "[  OK  ] Stopped Display Manager", delay: 100 },
+  { text: "[    0.234567] Stopping Network Services...", delay: 150 },
+  { text: "[  OK  ] Stopped Network Name Resolution", delay: 100 },
+  { text: "[  OK  ] Stopped Network Configuration", delay: 100 },
+  { text: "[    0.345678] Unmounting filesystems...", delay: 150 },
+  { text: "[  OK  ] Unmounted /home/subodh-ram/portfolio", delay: 100 },
+  { text: "[  OK  ] Unmounted /sys/fs/cgroup", delay: 80 },
+  { text: "[  OK  ] Unmounted /sys/kernel/security", delay: 80 },
+  { text: "[    0.456789] Stopping Journal Service...", delay: 120 },
+  { text: "[  OK  ] Stopped Journal Service", delay: 100 },
+  { text: "[    0.567890] Reached target Shutdown", delay: 150 },
+  { text: "[    0.678901] Deactivating swap...", delay: 100 },
+  { text: "[  OK  ] Deactivated swap", delay: 100 },
+  { text: "[    0.789012] All filesystems unmounted", delay: 150 },
+  { text: "[    0.890123] All swaps deactivated", delay: 100 },
+  { text: "[    1.001234] Detaching DM devices", delay: 150 },
+  { text: "[    1.112345] Detaching loop devices", delay: 100 },
+  { text: "[    1.223456] System halted", delay: 200 },
+  { text: "", delay: 500 }
+];
+function ShutdownSequence({ onShutdownComplete }) {
+  const [messages, setMessages] = reactExports.useState([]);
+  const [currentIndex, setCurrentIndex] = reactExports.useState(0);
+  const [isComplete, setIsComplete] = reactExports.useState(false);
+  const scrollRef = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+  reactExports.useEffect(() => {
+    if (currentIndex >= shutdownMessages.length) {
+      setIsComplete(true);
+      setTimeout(() => {
+        onShutdownComplete();
+      }, 1e3);
+      return;
+    }
+    const timer = setTimeout(() => {
+      const message = shutdownMessages[currentIndex];
+      setMessages((prev) => [...prev, message.text]);
+      setCurrentIndex((prev) => prev + 1);
+      if (message.text.trim()) {
+        keyboardSound.playKeyPress();
+      }
+    }, shutdownMessages[currentIndex].delay);
+    return () => clearTimeout(timer);
+  }, [currentIndex, onShutdownComplete]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 bg-black z-50 overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "div",
+    {
+      ref: scrollRef,
+      className: "h-full overflow-y-auto p-4 font-mono text-[10px] sm:text-xs",
+      style: { scrollBehavior: "smooth" },
+      children: [
+        messages.map((message, index2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: `mb-1 ${message.includes("[  OK  ]") ? "text-green-500" : message.includes("Stopping") || message.includes("Unmounting") ? "text-yellow-500" : message.includes("halted") || message.includes("poweroff") ? "text-red-500" : message.includes("Broadcast") ? "text-cyan-400" : "text-gray-300"}`,
+            children: message || " "
+          },
+          index2
+        )),
+        !isComplete && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-block w-2 h-4 bg-red-500 animate-pulse ml-1" })
+      ]
+    }
+  ) });
+}
+const nothingLogoSmall = `
+███╗   ██╗ ██████╗ ████████╗██╗  ██╗██╗███╗   ██╗ ██████╗ 
+████╗  ██║██╔═══██╗╚══██╔══╝██║  ██║██║████╗  ██║██╔════╝ 
+██╔██╗ ██║██║   ██║   ██║   ███████║██║██╔██╗ ██║██║  ███╗
+██║╚██╗██║██║   ██║   ██║   ██╔══██║██║██║╚██╗██║██║   ██║
+██║ ╚████║╚██████╔╝   ██║   ██║  ██║██║██║ ╚████║╚██████╔╝
+╚═╝  ╚═══╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ 
+`;
+function PowerOffScreen({ onPowerOn }) {
+  const [showMessage, setShowMessage] = reactExports.useState(false);
+  reactExports.useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowMessage(true);
+    }, 1e3);
+    return () => clearTimeout(timer);
+  }, []);
+  reactExports.useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (showMessage) {
+        onPowerOn();
+      }
+    };
+    const handleClick = () => {
+      if (showMessage) {
+        onPowerOn();
+      }
+    };
+    window.addEventListener("keydown", handleKeyPress);
+    window.addEventListener("click", handleClick);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+      window.removeEventListener("click", handleClick);
+    };
+  }, [showMessage, onPowerOn]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed inset-0 bg-black z-50 flex items-center justify-center", children: showMessage && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center font-mono animate-fade-in", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-8", children: /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { className: "text-gray-700 text-[8px] sm:text-xs leading-tight", children: nothingLogoSmall }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-4xl sm:text-6xl mb-4 text-gray-800", children: "⚡" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xl sm:text-2xl text-gray-600 mb-2 font-bold", children: "System Powered Off" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs sm:text-sm text-gray-700", children: (/* @__PURE__ */ new Date()).toLocaleString() })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-green-600 text-base sm:text-lg animate-pulse", children: "Press any key to power on..." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-gray-700 text-xs", children: "or click anywhere on the screen" })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-12 text-gray-800 text-xs", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-2", children: "NOTHING OS - Portfolio Edition v2.0" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "© 2026 Subodh Ram Technologies" })
+    ] })
+  ] }) });
+}
+const KeyboardSoundToggle = ({ onToggle, initialEnabled = true }) => {
+  const [enabled, setEnabled] = reactExports.useState(initialEnabled);
+  reactExports.useEffect(() => {
+    const saved = localStorage.getItem("keyboardSoundEnabled");
+    if (saved !== null) {
+      const isEnabled = saved === "true";
+      setEnabled(isEnabled);
+      onToggle(isEnabled);
+    }
+  }, [onToggle]);
+  const handleToggle = () => {
+    const newState = !enabled;
+    setEnabled(newState);
+    onToggle(newState);
+    localStorage.setItem("keyboardSoundEnabled", String(newState));
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed top-4 right-4 z-50", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "button",
+    {
+      onClick: handleToggle,
+      className: "flex items-center gap-2 px-4 py-2 bg-terminal-black/80 border border-terminal-green/30 rounded-md hover:border-terminal-green/60 transition-all backdrop-blur-sm group",
+      title: enabled ? "Disable keyboard sounds" : "Enable keyboard sounds",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green text-sm font-mono", children: enabled ? "🔊" : "🔇" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-terminal-green/80 text-xs font-mono group-hover:text-terminal-green", children: "KEYBOARD" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `w-10 h-5 rounded-full transition-colors ${enabled ? "bg-terminal-green/30" : "bg-terminal-green/10"} relative`, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `absolute top-0.5 w-4 h-4 rounded-full bg-terminal-green transition-transform ${enabled ? "translate-x-5" : "translate-x-0.5"}` }) })
+      ]
+    }
+  ) });
+};
+const KEYBOARD_SOUNDS = {
+  enabled: true,
+  volume: 0.3,
+  // Frequency ranges for different key types (Hz)
+  frequencies: {
+    regular: { min: 80, max: 120 },
+    // Deep thocky sound
+    space: { min: 60, max: 80 },
+    // Even deeper for spacebar
+    modifier: { min: 90, max: 110 },
+    // Slightly higher for modifiers
+    enter: { min: 70, max: 90 }
+    // Deep satisfying thock
+  },
+  // Duration in seconds
+  duration: {
+    attack: 5e-3,
+    decay: 0.08,
+    sustain: 0.02,
+    release: 0.12
+  }
+};
+const useKeyboardSound = (enabled = true) => {
+  const audioContextRef = reactExports.useRef(null);
+  const isEnabledRef = reactExports.useRef(enabled);
+  const isInitializedRef = reactExports.useRef(false);
+  reactExports.useEffect(() => {
+    isEnabledRef.current = enabled;
+  }, [enabled]);
+  const initAudioContext = reactExports.useCallback(() => {
+    if (!audioContextRef.current && !isInitializedRef.current) {
+      try {
+        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+        isInitializedRef.current = true;
+        console.log("🎹 Keyboard sound initialized!");
+      } catch (error) {
+        console.error("Failed to initialize AudioContext:", error);
+      }
+    }
+  }, []);
+  const playKeySound = reactExports.useCallback((key) => {
+    if (!audioContextRef.current) {
+      initAudioContext();
+    }
+    if (!isEnabledRef.current || !audioContextRef.current) return;
+    try {
+      const ctx = audioContextRef.current;
+      if (ctx.state === "suspended") {
+        ctx.resume();
+      }
+      const now2 = ctx.currentTime;
+      let freqRange = KEYBOARD_SOUNDS.frequencies.regular;
+      if (key === " ") {
+        freqRange = KEYBOARD_SOUNDS.frequencies.space;
+      } else if (["Shift", "Control", "Alt", "Meta", "Tab", "CapsLock"].includes(key)) {
+        freqRange = KEYBOARD_SOUNDS.frequencies.modifier;
+      } else if (key === "Enter") {
+        freqRange = KEYBOARD_SOUNDS.frequencies.enter;
+      }
+      const baseFreq = freqRange.min + Math.random() * (freqRange.max - freqRange.min);
+      const variation = 0.95 + Math.random() * 0.1;
+      const frequency = baseFreq * variation;
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      const filterNode = ctx.createBiquadFilter();
+      oscillator.type = "triangle";
+      oscillator.frequency.setValueAtTime(frequency, now2);
+      filterNode.type = "lowpass";
+      filterNode.frequency.setValueAtTime(800, now2);
+      filterNode.Q.setValueAtTime(1, now2);
+      const { attack, decay, sustain, release } = KEYBOARD_SOUNDS.duration;
+      const peakVolume = KEYBOARD_SOUNDS.volume * (0.8 + Math.random() * 0.4);
+      gainNode.gain.setValueAtTime(0, now2);
+      gainNode.gain.linearRampToValueAtTime(peakVolume, now2 + attack);
+      gainNode.gain.linearRampToValueAtTime(peakVolume * 0.6, now2 + attack + decay);
+      gainNode.gain.setValueAtTime(peakVolume * 0.6, now2 + attack + decay + sustain);
+      gainNode.gain.exponentialRampToValueAtTime(1e-3, now2 + attack + decay + sustain + release);
+      const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.1, ctx.sampleRate);
+      const noiseData = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < noiseData.length; i++) {
+        noiseData[i] = (Math.random() * 2 - 1) * 0.1;
+      }
+      const noiseSource = ctx.createBufferSource();
+      const noiseGain = ctx.createGain();
+      const noiseFilter = ctx.createBiquadFilter();
+      noiseSource.buffer = noiseBuffer;
+      noiseFilter.type = "bandpass";
+      noiseFilter.frequency.setValueAtTime(2e3, now2);
+      noiseFilter.Q.setValueAtTime(2, now2);
+      noiseGain.gain.setValueAtTime(0, now2);
+      noiseGain.gain.linearRampToValueAtTime(0.15, now2 + 2e-3);
+      noiseGain.gain.exponentialRampToValueAtTime(1e-3, now2 + 0.03);
+      oscillator.connect(filterNode);
+      filterNode.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      noiseSource.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+      oscillator.start(now2);
+      noiseSource.start(now2);
+      const totalDuration = attack + decay + sustain + release;
+      oscillator.stop(now2 + totalDuration);
+      noiseSource.stop(now2 + 0.03);
+    } catch (error) {
+      console.error("Error playing key sound:", error);
+    }
+  }, [initAudioContext]);
+  reactExports.useEffect(() => {
+    if (!enabled) return;
+    const handleKeyDown = (e) => {
+      if (e.repeat) return;
+      playKeySound(e.key);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [enabled, playKeySound]);
+  return { playKeySound };
+};
 function App() {
+  const [systemState, setSystemState] = reactExports.useState("booting");
+  const [keyboardSoundEnabled, setKeyboardSoundEnabled] = reactExports.useState(true);
+  useKeyboardSound(keyboardSoundEnabled);
   reactExports.useEffect(() => {
     document.documentElement.style.scrollBehavior = "smooth";
   }, []);
+  const handleBootComplete = () => {
+    setSystemState("running");
+  };
+  const handleShutdown = () => {
+    setSystemState("shutting-down");
+  };
+  const handleShutdownComplete = () => {
+    setSystemState("powered-off");
+  };
+  const handlePowerOn = () => {
+    setSystemState("booting");
+  };
+  if (systemState === "booting") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(BootSequence, { onBootComplete: handleBootComplete });
+  }
+  if (systemState === "shutting-down") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(ShutdownSequence, { onShutdownComplete: handleShutdownComplete });
+  }
+  if (systemState === "powered-off") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(PowerOffScreen, { onPowerOn: handlePowerOn });
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative min-h-screen bg-terminal-black text-terminal-white overflow-x-hidden", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(NetworkLines, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx(ScanlineOverlay, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      KeyboardSoundToggle,
+      {
+        onToggle: setKeyboardSoundEnabled,
+        initialEnabled: keyboardSoundEnabled
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Hero, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(NetworkStats, {}),
       /* @__PURE__ */ jsxRuntimeExports.jsx(PersonalInfo, {}),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Education, {}),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Projects, {}),
@@ -23430,7 +24467,7 @@ function App() {
       /* @__PURE__ */ jsxRuntimeExports.jsx(Skills, {}),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Achievements, {}),
       /* @__PURE__ */ jsxRuntimeExports.jsx(Contact, {}),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, {})
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Footer, { onShutdown: handleShutdown })
     ] })
   ] });
 }
