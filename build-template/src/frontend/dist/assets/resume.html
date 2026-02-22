@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subodh Ram - Software Engineer Resume</title>
+    <title>Subodh Ram - Terminal Resume</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,338 +12,563 @@
             box-sizing: border-box;
         }
         
+        :root {
+            --terminal-black: #0a0a0a;
+            --terminal-green: #00ff00;
+            --terminal-yellow: #ffff00;
+            --terminal-white: #f0f0f0;
+            --terminal-gray: #808080;
+        }
+        
         body {
-            font-family: 'Calibri', 'Arial', sans-serif;
-            line-height: 1.5;
-            color: #000;
-            background: #fff;
-            font-size: 11pt;
+            font-family: 'Courier Prime', 'JetBrains Mono', 'Courier New', monospace;
+            background: var(--terminal-black);
+            color: var(--terminal-white);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
         }
         
-        .container {
-            max-width: 8.5in;
+        .terminal-container {
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 0.5in 0.6in;
-            background: white;
+            background: var(--terminal-black);
+            border: 2px solid var(--terminal-green);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+            position: relative;
         }
         
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #000;
-            padding-bottom: 15px;
-        }
-        
-        .name {
-            font-size: 28pt;
-            font-weight: bold;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-        
-        .title {
-            font-size: 12pt;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .contact {
-            font-size: 10pt;
-            color: #333;
-        }
-        
-        .contact a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-        
-        /* Section */
-        .section {
-            margin-bottom: 18px;
-        }
-        
-        .section-title {
-            font-size: 13pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            border-bottom: 1.5px solid #000;
-            padding-bottom: 3px;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
-        
-        /* Experience/Project Item */
-        .item {
-            margin-bottom: 14px;
-        }
-        
-        .item-header {
+        .terminal-header {
+            background: #1a1a1a;
+            border-bottom: 1px solid var(--terminal-green);
+            padding: 10px 15px;
             display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 4px;
+            align-items: center;
+            gap: 10px;
         }
         
-        .item-title {
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--terminal-green);
+            border: 1px solid var(--terminal-green);
+            opacity: 0.7;
+        }
+        
+        .terminal-title {
+            color: var(--terminal-green);
+            font-size: 14px;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .terminal-body {
+            padding: 30px;
+        }
+        
+        .prompt {
+            color: var(--terminal-green);
+            margin-right: 10px;
+        }
+        
+        .command-line {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .command {
+            color: var(--terminal-white);
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            color: var(--terminal-yellow);
+            font-size: 18px;
             font-weight: bold;
-            font-size: 11pt;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--terminal-green);
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
-        .item-date {
-            font-size: 10pt;
-            color: #555;
-            font-style: italic;
+        .section-header::before {
+            content: '>';
+            color: var(--terminal-green);
         }
         
-        .item-subtitle {
-            font-size: 10pt;
-            color: #555;
-            margin-bottom: 6px;
+        .info-line {
+            margin-bottom: 8px;
+            display: flex;
+            flex-wrap: wrap;
         }
         
-        .item-subtitle strong {
-            color: #000;
+        .label {
+            color: var(--terminal-yellow);
+            min-width: 120px;
         }
         
-        /* Bullet Points */
-        ul {
-            margin-left: 18px;
-            margin-top: 4px;
+        .value {
+            color: var(--terminal-white);
         }
         
-        li {
-            margin-bottom: 4px;
-            font-size: 10.5pt;
-            line-height: 1.4;
+        .subsection {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 2px solid var(--terminal-green);
         }
         
-        /* Skills */
-        .skills-row {
+        .subsection-title {
+            color: var(--terminal-green);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .subsection-meta {
+            color: var(--terminal-gray);
+            font-size: 14px;
             margin-bottom: 8px;
         }
         
-        .skill-category {
-            font-weight: bold;
-            display: inline;
+        .bullet-list {
+            list-style: none;
+            padding-left: 0;
         }
         
-        .skill-list {
-            display: inline;
+        .bullet-list li {
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
         }
         
-        /* Education */
-        .education-item {
-            margin-bottom: 10px;
+        .bullet-list li::before {
+            content: '•';
+            color: var(--terminal-green);
+            position: absolute;
+            left: 0;
         }
         
-        .degree {
-            font-weight: bold;
-            font-size: 11pt;
+        .skill-tag {
+            display: inline-block;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid var(--terminal-green);
+            color: var(--terminal-white);
+            padding: 3px 10px;
+            margin: 3px;
+            font-size: 13px;
         }
         
-        .university {
-            font-size: 10pt;
-            color: #555;
+        .status-indicator {
+            color: var(--terminal-green);
+            animation: blink 1.5s infinite;
         }
         
-        /* Print Optimization */
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 0, 0.03) 0px,
+                rgba(0, 255, 0, 0.03) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+        }
+        
         @media print {
             body {
-                margin: 0;
-                padding: 0;
+                background: white;
+                color: black;
             }
-            .container {
-                padding: 0.4in 0.5in;
+            .terminal-container {
+                border: 2px solid black;
+                box-shadow: none;
             }
-            .section {
-                page-break-inside: avoid;
+            .terminal-header {
+                background: #f0f0f0;
+                border-bottom: 1px solid black;
             }
-            .item {
-                page-break-inside: avoid;
+            .terminal-button {
+                background: black;
+                border-color: black;
+            }
+            .terminal-title, .prompt, .section-header::before, .subsection-title, .bullet-list li::before {
+                color: black;
+            }
+            .section-header, .label {
+                color: #333;
+            }
+            .value, .command {
+                color: black;
+            }
+            .skill-tag {
+                background: #f0f0f0;
+                border-color: black;
+                color: black;
+            }
+            .scanline {
+                display: none;
+            }
+            .status-indicator {
+                animation: none;
+                opacity: 1;
             }
         }
         
-        @page {
-            size: letter;
-            margin: 0;
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .terminal-body {
+                padding: 15px;
+            }
+            .label {
+                min-width: 100px;
+                font-size: 13px;
+            }
+            .value {
+                font-size: 13px;
+            }
+            .section-header {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="name">SUBODH RAM</div>
-            <div class="title">Software Engineer | Full Stack Developer | Network Engineer</div>
-            <div class="contact">
-                📧 subodhram3350@gmail.com | 📱 +91 9076314255 | 
-                💼 <a href="https://linkedin.com/in/subodhram">linkedin.com/in/subodhram</a> | 
-                💻 <a href="https://github.com/subodh-001">github.com/subodh-001</a>
+    <div class="terminal-container">
+        <div class="scanline"></div>
+        
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <span class="terminal-button"></span>
+                <span class="terminal-button"></span>
+                <span class="terminal-button"></span>
             </div>
+            <div class="terminal-title">root@subodh-ram:~# cat resume.txt</div>
         </div>
+        
+        <div class="terminal-body">
+            <!-- Header -->
+            <div class="section">
+                <div class="command-line">
+                    <span class="prompt">C:\Users\SubodhRam></span>
+                    <span class="command">type user_profile.txt</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <h1 style="color: var(--terminal-green); font-size: 32px; margin-bottom: 10px;">SUBODH RAM</h1>
+                    <p style="color: var(--terminal-yellow); font-size: 16px; margin-bottom: 5px;">Master of Computer Applications Student</p>
+                    <p style="color: var(--terminal-white); font-size: 14px;">Full Stack Developer & Network Engineer</p>
+                </div>
+            </div>
 
-        <!-- Education -->
-        <div class="section">
-            <div class="section-title">Education</div>
-            
-            <div class="education-item">
-                <div class="item-header">
-                    <div class="degree">Master of Computer Applications (MCA)</div>
-                    <div class="item-date">2024 – 2026</div>
+            <!-- Contact Information -->
+            <div class="section">
+                <div class="section-header">CONTACT INFORMATION</div>
+                <div class="command-line">
+                    <span class="prompt">C:\Users\SubodhRam></span>
+                    <span class="command">ipconfig /all</span>
                 </div>
-                <div class="university">MPSTME, NMIMS University | CGPA: 7.38/10 | Specialization: Networking & IT Infrastructure</div>
-            </div>
-            
-            <div class="education-item">
-                <div class="item-header">
-                    <div class="degree">Bachelor of Science in Information Technology</div>
-                    <div class="item-date">2020 – 2023</div>
+                <div style="margin-top: 10px;">
+                    <div class="info-line">
+                        <span class="label">Email:</span>
+                        <span class="value">subodhram3350@gmail.com</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="label">Phone:</span>
+                        <span class="value">+91 9076314255</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="label">LinkedIn:</span>
+                        <span class="value">linkedin.com/in/subodhram</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="label">GitHub:</span>
+                        <span class="value">github.com/subodh-001</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="label">DOB:</span>
+                        <span class="value">28 April 2003</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="label">Status:</span>
+                        <span class="value"><span class="status-indicator">●</span> ONLINE</span>
+                    </div>
                 </div>
-                <div class="university">Tolani College of Commerce | CGPA: 8.28/10</div>
             </div>
-        </div>
 
-        <!-- Technical Skills -->
-        <div class="section">
-            <div class="section-title">Technical Skills</div>
-            
-            <div class="skills-row">
-                <span class="skill-category">Languages:</span>
-                <span class="skill-list"> Java, Python, JavaScript, TypeScript, C++, SQL</span>
+            <!-- Professional Summary -->
+            <div class="section">
+                <div class="section-header">PROFESSIONAL SUMMARY</div>
+                <div class="command-line">
+                    <span class="prompt">C:\Users\SubodhRam></span>
+                    <span class="command">cat summary.log</span>
+                </div>
+                <p style="margin-top: 10px; color: var(--terminal-white);">
+                    Master of Computer Applications student specializing in Networking & IT Infrastructure. 
+                    Experienced in data analysis, system security, and full-stack development with strong 
+                    analytical and problem-solving capabilities.
+                </p>
             </div>
-            
-            <div class="skills-row">
-                <span class="skill-category">Web Technologies:</span>
-                <span class="skill-list"> React.js, Node.js, Express.js, Next.js, Spring Boot, REST APIs, GraphQL</span>
-            </div>
-            
-            <div class="skills-row">
-                <span class="skill-category">Databases:</span>
-                <span class="skill-list"> MongoDB, MySQL, PostgreSQL, Firebase, Redis, Oracle DB</span>
-            </div>
-            
-            <div class="skills-row">
-                <span class="skill-category">Cloud & DevOps:</span>
-                <span class="skill-list"> Docker, Git, CI/CD, Linux, Shell Scripting, AWS basics</span>
-            </div>
-            
-            <div class="skills-row">
-                <span class="skill-category">Networking:</span>
-                <span class="skill-list"> TCP/IP, DNS, DHCP, VPN, Firewall Configuration, Network Security, Nmap, Wireshark</span>
-            </div>
-            
-            <div class="skills-row">
-                <span class="skill-category">Data Analytics:</span>
-                <span class="skill-list"> Power BI, Tableau, Excel, Statistical Analysis, Data Visualization</span>
-            </div>
-        </div>
 
-        <!-- Professional Experience -->
-        <div class="section">
-            <div class="section-title">Professional Experience</div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">Data Analyst Intern</div>
-                    <div class="item-date">Aug 2023 – Jan 2024</div>
+            <!-- Education -->
+            <div class="section">
+                <div class="section-header">EDUCATION</div>
+                <div class="command-line">
+                    <span class="prompt">C:\Users\SubodhRam></span>
+                    <span class="command">dir C:\Education\</span>
                 </div>
-                <div class="item-subtitle"><strong>Aivariant</strong> | Remote</div>
-                <ul>
-                    <li>Analyzed 100K+ records using Python and SQL to identify business trends, improving decision-making efficiency by 30%</li>
-                    <li>Developed 15+ interactive Power BI and Tableau dashboards for real-time data visualization and reporting</li>
-                    <li>Automated data processing workflows using Python scripts, reducing manual processing time by 40%</li>
-                    <li>Conducted A/B testing and statistical analysis to optimize marketing campaigns, increasing conversion rates by 25%</li>
-                    <li>Collaborated with cross-functional teams to deliver data-driven insights and actionable recommendations</li>
-                </ul>
-            </div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">IT Support Specialist (Freelance)</div>
-                    <div class="item-date">2022 – Present</div>
+                
+                <div class="subsection" style="margin-top: 15px;">
+                    <div class="subsection-title">Master of Computer Applications (MCA)</div>
+                    <div class="subsection-meta">MPSTME, NMIMS University | 2024 - 2026 | CGPA: 7.38/10</div>
+                    <div class="info-line">
+                        <span class="label">Specialization:</span>
+                        <span class="value">Networking & IT Infrastructure</span>
+                    </div>
                 </div>
-                <div class="item-subtitle"><strong>Self-Employed</strong> | Remote</div>
-                <ul>
-                    <li>Provided technical support for 50+ network deployments, achieving 99.5% client satisfaction rate</li>
-                    <li>Configured and maintained routers, switches, and firewalls for small to medium-sized businesses</li>
-                    <li>Implemented security measures including VPN, SSL/TLS, and access controls, maintaining zero security breaches</li>
-                    <li>Performed system diagnostics and troubleshooting, resolving 95% of issues within 24 hours</li>
-                    <li>Created comprehensive documentation and user guides for network infrastructure and security protocols</li>
-                </ul>
+                
+                <div class="subsection">
+                    <div class="subsection-title">Bachelor of Science in Information Technology</div>
+                    <div class="subsection-meta">Tolani College of Commerce | 2020 - 2023 | CGPA: 8.28/10</div>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">Higher Secondary Certificate (HSC)</div>
+                    <div class="subsection-meta">Chandrabhan Sharma College | 2018 - 2020 | 74.77%</div>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">Secondary School Certificate (SSC)</div>
+                    <div class="subsection-meta">S.A Public School | 2018 | 66.20%</div>
+                </div>
             </div>
-        </div>
 
-        <!-- Projects -->
-        <div class="section">
-            <div class="section-title">Projects</div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">Smart Parking System</div>
-                    <div class="item-date">2025</div>
+            <!-- Technical Skills -->
+            <div class="section">
+                <div class="section-header">TECHNICAL SKILLS</div>
+                <div class="command-line">
+                    <span class="prompt">C:\Users\SubodhRam></span>
+                    <span class="command">systeminfo | findstr /C:"Skills"</span>
                 </div>
-                <div class="item-subtitle"><strong>Tech Stack:</strong> Java, Spring Boot, Oracle DB, Firebase, REST API, OpenStreetMap</div>
-                <ul>
-                    <li>Developed full-stack parking management system with real-time availability tracking for 5000+ users</li>
-                    <li>Implemented dynamic pricing algorithm based on demand, optimizing revenue by 35%</li>
-                    <li>Integrated OpenStreetMap API for GPS navigation and QR-based secure access control</li>
-                    <li>Built admin dashboard with analytics, reducing operational overhead by 40%</li>
-                </ul>
-            </div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">Property Price Prediction Platform</div>
-                    <div class="item-date">2025</div>
+                
+                <div style="margin-top: 15px;">
+                    <div class="info-line" style="margin-bottom: 10px;">
+                        <span class="label">Programming:</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">TypeScript</span>
+                        <span class="skill-tag">C++</span>
+                    </div>
+                    
+                    <div class="info-line" style="margin-bottom: 10px;">
+                        <span class="label">Web Development:</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">Express.js</span>
+                        <span class="skill-tag">Next.js</span>
+                        <span class="skill-tag">Vite</span>
+                        <span class="skill-tag">Tailwind CSS</span>
+                    </div>
+                    
+                    <div class="info-line" style="margin-bottom: 10px;">
+                        <span class="label">Databases:</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <span class="skill-tag">MongoDB</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">PostgreSQL</span>
+                        <span class="skill-tag">Firebase</span>
+                        <span class="skill-tag">Redis</span>
+                    </div>
+                    
+                    <div class="info-line" style="margin-bottom: 10px;">
+                        <span class="label">Networking:</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <span class="skill-tag">TCP/IP</span>
+                        <span class="skill-tag">DNS</span>
+                        <span class="skill-tag">DHCP</span>
+                        <span class="skill-tag">VPN</span>
+                        <span class="skill-tag">Firewall</span>
+                        <span class="skill-tag">Nmap</span>
+                        <span class="skill-tag">Wireshark</span>
+                    </div>
+                    
+                    <div class="info-line" style="margin-bottom: 10px;">
+                        <span class="label">Tools:</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <span class="skill-tag">Power BI</span>
+                        <span class="skill-tag">Tableau</span>
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">Linux</span>
+                    </div>
                 </div>
-                <div class="item-subtitle"><strong>Tech Stack:</strong> React, Node.js, Python, MongoDB, TensorFlow, Machine Learning</div>
-                <ul>
-                    <li>Built AI-powered property price prediction system using ML models, achieving 94% accuracy on 50K+ datasets</li>
-                    <li>Developed interactive dashboards with real-time analytics and market trend visualization</li>
-                    <li>Implemented RESTful API for third-party integrations, handling 10K+ daily predictions</li>
-                    <li>Automated data scraping pipeline for continuous model training and improvement</li>
-                </ul>
             </div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">SmartTech Connect</div>
-                    <div class="item-date">2025</div>
-                </div>
-                <div class="item-subtitle"><strong>Tech Stack:</strong> React, Node.js, MongoDB, Firebase, Socket.io, WebRTC</div>
-                <ul>
-                    <li>Created technician booking platform connecting 500+ technicians with 2K+ bookings, rated 4.8/5</li>
-                    <li>Implemented real-time chat using WebSocket and community forum with threaded discussions</li>
-                    <li>Developed AI-powered service recommendation engine based on user history and preferences</li>
-                    <li>Built rating system with sentiment analysis for quality assurance and feedback management</li>
-                </ul>
-            </div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">Network Monitor Dashboard</div>
-                    <div class="item-date">2024</div>
-                </div>
-                <div class="item-subtitle"><strong>Tech Stack:</strong> Python, Flask, React, InfluxDB, Grafana, SNMP</div>
-                <ul>
-                    <li>Developed real-time network monitoring system for 100+ devices with 99.5% uptime</li>
-                    <li>Implemented bandwidth analytics and automated alerting system, reducing incident response time by 60%</li>
-                    <li>Created device discovery and network topology mapping with multi-protocol support (SNMP, NetFlow, sFlow)</li>
-                </ul>
-            </div>
-        </div>
 
-        <!-- Certifications & Achievements -->
-        <div class="section">
-            <div class="section-title">Certifications & Achievements</div>
-            <ul>
-                <li><strong>Data Analytics Professional Certificate</strong> – ExcelR (Aug 2023 – Jan 2024)</li>
-                <li>Improved data processing efficiency by 40% through automation and optimization techniques</li>
-                <li>Delivered 15+ analytical dashboards recognized for business impact and data-driven insights</li>
-                <li>Maintained 99.5% client satisfaction rate across 50+ freelance IT support projects</li>
-            </ul>
+            <!-- Professional Experience -->
+            <div class="section">
+                <div class="section-header">PROFESSIONAL EXPERIENCE</div>
+                <div class="command-line">
+                    <span class="prompt">C:\Users\SubodhRam></span>
+                    <span class="command">tasklist | findstr "experience"</span>
+                </div>
+                
+                <div class="subsection" style="margin-top: 15px;">
+                    <div class="subsection-title">Data Analyst Intern - Aivariant</div>
+                    <div class="subsection-meta">Aug 2023 - Jan 2024 | Remote</div>
+                    <ul class="bullet-list">
+                        <li>Analyzed large datasets (100K+ records) to identify trends and patterns</li>
+                        <li>Created 15+ interactive dashboards using Power BI and Tableau</li>
+                        <li>Collaborated with cross-functional teams to deliver actionable insights</li>
+                        <li>Automated data processing workflows using Python, reducing processing time by 40%</li>
+                        <li>Conducted A/B testing and statistical analysis for business decisions</li>
+                        <li>Presented findings to stakeholders through comprehensive reports</li>
+                    </ul>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">IT Support Specialist - Freelance</div>
+                    <div class="subsection-meta">2022 - Present | Remote</div>
+                    <ul class="bullet-list">
+                        <li>Provided technical support for network configuration and troubleshooting</li>
+                        <li>Configured and maintained routers, switches, and firewalls</li>
+                        <li>Implemented security measures including VPN, SSL/TLS, and access controls</li>
+                        <li>Performed system diagnostics and resolved hardware/software issues</li>
+                        <li>Maintained comprehensive system documentation and user guides</li>
+                        <li>Conducted network performance monitoring and optimization</li>
+                    </ul>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">Full Stack Developer - Academic Projects</div>
+                    <div class="subsection-meta">2023 - Present | NMIMS University</div>
+                    <ul class="bullet-list">
+                        <li>Developed 4+ full-stack applications using MERN stack</li>
+                        <li>Implemented RESTful APIs and microservices architecture</li>
+                        <li>Integrated third-party services (Firebase, Payment Gateways)</li>
+                        <li>Conducted code reviews and maintained version control with Git</li>
+                        <li>Optimized application performance and database queries</li>
+                        <li>Deployed applications on cloud platforms</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Featured Projects -->
+            <div class="section">
+                <div class="section-header">FEATURED PROJECTS</div>
+                <div class="command-line">
+                    <span class="prompt">C:\Users\SubodhRam></span>
+                    <span class="command">dir C:\Projects\ /s</span>
+                </div>
+                
+                <div class="subsection" style="margin-top: 15px;">
+                    <div class="subsection-title">Smart Parking System (2025)</div>
+                    <div class="subsection-meta">Tech: Java, Spring Boot, JSP, Oracle DB, Firebase, REST API</div>
+                    <ul class="bullet-list">
+                        <li>Real-time parking discovery and availability tracking</li>
+                        <li>Dynamic pricing engine with demand-based algorithms</li>
+                        <li>OpenStreetMap integration for GPS navigation</li>
+                        <li>QR-based secure access control and payment gateway</li>
+                    </ul>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">Property Price Prediction Platform (2025)</div>
+                    <div class="subsection-meta">Tech: React, Node.js, Python, MongoDB, TensorFlow, ML</div>
+                    <ul class="bullet-list">
+                        <li>AI-based property price prediction using ML models (94% accuracy)</li>
+                        <li>Interactive dashboards with real-time analytics</li>
+                        <li>Market trend analysis with historical data</li>
+                        <li>RESTful API for third-party integrations</li>
+                    </ul>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">SmartTech Connect (2025)</div>
+                    <div class="subsection-meta">Tech: React, Node.js, MongoDB, Firebase, Socket.io, WebRTC</div>
+                    <ul class="bullet-list">
+                        <li>Technician booking and scheduling system</li>
+                        <li>Real-time chat with WebSocket support</li>
+                        <li>Community forum with threaded discussions</li>
+                        <li>AI-powered service recommendations</li>
+                    </ul>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">Network Monitor Dashboard (2024)</div>
+                    <div class="subsection-meta">Tech: Python, Flask, React, InfluxDB, Grafana, SNMP</div>
+                    <ul class="bullet-list">
+                        <li>Real-time network traffic monitoring</li>
+                        <li>Bandwidth usage analytics and alerts</li>
+                        <li>Device discovery and topology mapping</li>
+                        <li>Multi-protocol support (SNMP, NetFlow, sFlow)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Certifications -->
+            <div class="section">
+                <div class="section-header">CERTIFICATIONS</div>
+                <div class="command-line">
+                    <span class="prompt">C:\Users\SubodhRam></span>
+                    <span class="command">certutil -verify certificates.dat</span>
+                </div>
+                
+                <div class="subsection" style="margin-top: 15px;">
+                    <div class="subsection-title">Data Analytics Certification</div>
+                    <div class="subsection-meta">ExcelR | Aug 2023 - Jan 2024</div>
+                    <div class="info-line">
+                        <span class="label">Status:</span>
+                        <span class="value" style="color: var(--terminal-green);">✓ VERIFIED</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--terminal-green); text-align: center; color: var(--terminal-gray); font-size: 12px;">
+                <p>C:\Users\SubodhRam> echo "End of Resume"</p>
+                <p style="margin-top: 5px;">Generated: <span id="date"></span></p>
+                <p style="margin-top: 5px; color: var(--terminal-green);">System Status: <span class="status-indicator">●</span> READY</p>
+            </div>
         </div>
     </div>
+
+    <script>
+        // Set current date
+        document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    </script>
 </body>
 </html>

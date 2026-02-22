@@ -24108,12 +24108,12 @@ function BootSequence({ onBootComplete }) {
     }
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 bg-black z-50 overflow-hidden flex flex-col", children: [
-    showLogo && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-shrink-0 p-4 border-b border-gray-800", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-cyan-400 text-[10px] leading-none mb-2", children: "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { className: "text-green-400 font-bold text-xs sm:text-sm leading-tight", children: nothingLogo }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-cyan-400 text-[10px] text-center mt-1", children: "NOTHING OS - Portfolio Edition v2.0" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-gray-500 text-[8px] text-center", children: "Powered by Subodh Ram Technologies" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-cyan-400 text-[10px] leading-none mt-2", children: "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓" })
+    showLogo && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-shrink-0 p-2 sm:p-4 border-b border-gray-800 overflow-x-auto", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-cyan-400 text-[8px] sm:text-[10px] leading-none mb-1 sm:mb-2 whitespace-nowrap", children: "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("pre", { className: "text-green-400 font-bold text-[6px] xs:text-[8px] sm:text-xs md:text-sm leading-tight overflow-x-auto", children: nothingLogo }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-cyan-400 text-[8px] sm:text-[10px] text-center mt-1", children: "NOTHING OS - Portfolio Edition v2.0" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-gray-500 text-[6px] sm:text-[8px] text-center", children: "Powered by Subodh Ram Technologies" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-cyan-400 text-[8px] sm:text-[10px] leading-none mt-1 sm:mt-2 whitespace-nowrap", children: "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓" })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "div",

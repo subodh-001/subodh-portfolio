@@ -205,20 +205,20 @@ export default function BootSequence({ onBootComplete }: BootSequenceProps) {
     <div className="fixed inset-0 bg-black z-50 overflow-hidden flex flex-col">
       {/* Fixed NOTHING Logo at top */}
       {showLogo && (
-        <div className="flex-shrink-0 p-4 border-b border-gray-800">
-          <div className="text-cyan-400 text-[10px] leading-none mb-2">
+        <div className="flex-shrink-0 p-2 sm:p-4 border-b border-gray-800 overflow-x-auto">
+          <div className="text-cyan-400 text-[8px] sm:text-[10px] leading-none mb-1 sm:mb-2 whitespace-nowrap">
             ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
           </div>
-          <pre className="text-green-400 font-bold text-xs sm:text-sm leading-tight">
+          <pre className="text-green-400 font-bold text-[6px] xs:text-[8px] sm:text-xs md:text-sm leading-tight overflow-x-auto">
 {nothingLogo}
           </pre>
-          <div className="text-cyan-400 text-[10px] text-center mt-1">
+          <div className="text-cyan-400 text-[8px] sm:text-[10px] text-center mt-1">
             NOTHING OS - Portfolio Edition v2.0
           </div>
-          <div className="text-gray-500 text-[8px] text-center">
+          <div className="text-gray-500 text-[6px] sm:text-[8px] text-center">
             Powered by Subodh Ram Technologies
           </div>
-          <div className="text-cyan-400 text-[10px] leading-none mt-2">
+          <div className="text-cyan-400 text-[8px] sm:text-[10px] leading-none mt-1 sm:mt-2 whitespace-nowrap">
             ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
           </div>
         </div>
