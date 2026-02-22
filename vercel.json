@@ -1,9 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd build-template/src/frontend && pnpm install && pnpm run build:skip-bindings",
-  "outputDirectory": "build-template/src/frontend/dist",
-  "installCommand": "echo 'Skipping root install'",
-  "framework": null,
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/(.*)",

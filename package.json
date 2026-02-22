@@ -1,0 +1,7 @@
+{
+  "name": "subodh-portfolio",
+  "version": "1.0.0",
+  "scripts": {
+    "vercel-build": "cd build-template/src/frontend && pnpm install && pnpm run build:skip-bindings && cp -r dist ../../../dist"
+  }
+}
